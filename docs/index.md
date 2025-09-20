@@ -1,4 +1,9 @@
-# Hangfire.WorkflowCore Documentation
+---
+layout: default
+title: Home
+---
+
+# Hangfire.WorkflowCore
 
 A powerful integration library that combines [Hangfire](https://www.hangfire.io/)'s robust job scheduling capabilities with [WorkflowCore](https://github.com/danielgerlag/workflow-core)'s advanced workflow orchestration engine.
 
@@ -6,16 +11,16 @@ A powerful integration library that combines [Hangfire](https://www.hangfire.io/
 
 ## Quick Links
 
-- 🚀 [**Getting Started**](getting-started.md) - Installation and basic setup
-- 📖 [**Complete Guide**](complete-guide.md) - Comprehensive documentation
-- 🧪 [**Examples**](examples.md) - Sample code and use cases
-- 🔧 [**API Reference**](api-reference.md) - Detailed API documentation
-- 📈 [**Dashboard**](dashboard.md) - Workflow monitoring and visualization
-- 🌐 [**ASP.NET Core Integration**](aspnetcore-integration.md) - HttpContext workflows
-- ⚙️ [**Configuration**](configuration.md) - Advanced configuration options
-- 🔄 [**Migration Guide**](migration-guide.md) - Upgrading from older versions
-- ❓ [**FAQ**](faq.md) - Frequently asked questions
-- 📋 [**Changelog**](changelog.md) - Version history and updates
+- 🚀 [**Getting Started**](getting-started) - Installation and basic setup
+- 📖 [**Complete Guide**](complete-guide) - Comprehensive documentation
+- 🧪 [**Examples**](examples) - Sample code and use cases
+- 🔧 [**API Reference**](api-reference) - Detailed API documentation
+- 📈 [**Dashboard**](dashboard) - Workflow monitoring and visualization
+- 🌐 [**ASP.NET Core Integration**](aspnetcore-integration) - HttpContext workflows
+- ⚙️ [**Configuration**](configuration) - Advanced configuration options
+- 🔄 [**Migration Guide**](migration-guide) - Upgrading from older versions
+- ❓ [**FAQ**](faq) - Frequently asked questions
+- 📋 [**Changelog**](changelog) - Version history and updates
 
 ## Features Overview
 
@@ -77,4 +82,11 @@ This project is licensed under **LGPL v3** to ensure compatibility with [Hangfir
 
 ---
 
-📖 **Get started with the [Getting Started Guide](getting-started.md)** or explore the [Complete Documentation](complete-guide.md)!
+📖 **Get started with the [Getting Started Guide](getting-started)** or explore the [Complete Documentation](complete-guide)**!
+
+## Need Help?
+
+- 📖 [Documentation](https://dominent.github.io/Hangfire.WorkflowCore/)
+- 🐛 [Issue Tracker](https://github.com/Dominent/Hangfire.WorkflowCore/issues)
+- 💬 [Discussions](https://github.com/Dominent/Hangfire.WorkflowCore/discussions)
+- 📦 [NuGet Packages](https://www.nuget.org/packages/Hangfire.WorkflowCore)

@@ -1,3 +1,8 @@
+---
+layout: default
+title: Getting Started
+---
+
 # Getting Started
 
 Get up and running with Hangfire.WorkflowCore in minutes.
@@ -164,11 +169,11 @@ var childJobId = BackgroundJobWorkflow.Instance
 
 ## Next Steps
 
-- 📖 [Complete Guide](complete-guide.md) - Comprehensive documentation
-- 🧪 [Examples](examples.md) - More complex workflow examples
-- 🌐 [ASP.NET Core Integration](aspnetcore-integration.md) - HttpContext workflows
-- 📊 [Dashboard Guide](dashboard.md) - Monitoring and visualization
-- ⚙️ [Configuration](configuration.md) - Advanced setup options
+- 📖 [Complete Guide](complete-guide) - Comprehensive documentation
+- 🧪 [Examples](examples) - More complex workflow examples
+- 🌐 [ASP.NET Core Integration](aspnetcore-integration) - HttpContext workflows
+- 📊 [Dashboard Guide](dashboard) - Monitoring and visualization
+- ⚙️ [Configuration](configuration) - Advanced setup options
 
 ## Common Issues
 
@@ -201,4 +206,4 @@ await workflowHost.StartAsync(CancellationToken.None);
 
 ---
 
-Need help? Check the [FAQ](faq.md) or [open an issue](https://github.com/Dominent/Hangfire.WorkflowCore/issues).
+Need help? Check the [FAQ](faq) or [open an issue](https://github.com/Dominent/Hangfire.WorkflowCore/issues).
