@@ -1,0 +1,45 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    
+    <!-- Package metadata -->
+    <Authors>Hangfire.WorkflowCore Contributors</Authors>
+    <Company>Hangfire.WorkflowCore</Company>
+    <Copyright>Copyright © $([System.DateTime]::Now.Year) Hangfire.WorkflowCore Contributors</Copyright>
+    <PackageProjectUrl>https://github.com/yourusername/Hangfire.WorkflowCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yourusername/Hangfire.WorkflowCore</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>hangfire;workflow;workflowcore;orchestration;background;jobs</PackageTags>
+    
+    <!-- Versioning -->
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    
+    <!-- Build output paths -->
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(MSBuildThisFileDirectory)bin\$(MSBuildProjectName)\</BaseOutputPath>
+  </PropertyGroup>
+  
+  <!-- Common package versions -->
+  <PropertyGroup>
+    <HangfireVersion>1.8.14</HangfireVersion>
+    <WorkflowCoreVersion>3.10.0</WorkflowCoreVersion>
+    <NpgsqlVersion>8.0.3</NpgsqlVersion>
+    <MicrosoftExtensionsVersion>8.0.0</MicrosoftExtensionsVersion>
+    
+    <!-- Test frameworks -->
+    <XunitVersion>2.5.3</XunitVersion>
+    <XunitRunnerVersion>2.5.3</XunitRunnerVersion>
+    <FluentAssertionsVersion>6.12.0</FluentAssertionsVersion>
+    <NSubstituteVersion>5.1.0</NSubstituteVersion>
+    <TestcontainersVersion>3.9.0</TestcontainersVersion>
+    <BenchmarkDotNetVersion>0.13.12</BenchmarkDotNetVersion>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,73 @@
+{
+  "name": "hangfire-workflowcore",
+  "version": "1.0.0",
+  "description": "Build and release scripts for Hangfire.WorkflowCore - A powerful integration library combining Hangfire's job scheduling with WorkflowCore's orchestration",
+  "main": "index.js",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js",
+    "pack": "node scripts/pack.js",
+    "clean": "node scripts/clean.js",
+    "restore": "dotnet restore",
+    "build:debug": "dotnet build --configuration Debug",
+    "build:release": "dotnet build --configuration Release",
+    "test:all": "dotnet test --configuration Release --verbosity minimal",
+    "test:watch": "dotnet test --watch",
+    "pack:nuget": "node scripts/pack-nuget.js",
+    "version:bump": "node scripts/version-bump.js",
+    "release": "node scripts/release.js",
+    "release:major": "npm run version:bump -- --type major && npm run release",
+    "release:minor": "npm run version:bump -- --type minor && npm run release",
+    "release:patch": "npm run version:bump -- --type patch && npm run release",
+    "sample:video": "dotnet run --project samples/VideoProcessing/VideoProcessing.csproj",
+    "ci:build": "npm run restore && npm run build:release && npm run test:all",
+    "ci:pack": "npm run ci:build && npm run pack:nuget",
+    "dev:setup": "npm run restore && npm run build:debug",
+    "dev:test": "npm run test:all",
+    "format": "dotnet format --verify-no-changes",
+    "format:fix": "dotnet format"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/username/Hangfire.WorkflowCore.git"
+  },
+  "keywords": [
+    "hangfire",
+    "workflow",
+    "workflowcore",
+    "jobs",
+    "scheduling",
+    "orchestration",
+    "dotnet",
+    "csharp",
+    "background-jobs",
+    "task-scheduling"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/username/Hangfire.WorkflowCore/issues"
+  },
+  "homepage": "https://github.com/username/Hangfire.WorkflowCore#readme",
+  "devDependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "cross-spawn": "^7.0.3",
+    "fs-extra": "^11.1.1",
+    "glob": "^10.3.10",
+    "semver": "^7.5.4"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ]
+}

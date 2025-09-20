@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <PackageId>Hangfire.WorkflowCore.Abstractions</PackageId>
+    <Description>Abstractions and interfaces for Hangfire.WorkflowCore integration</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire.Core" Version="$(HangfireVersion)" />
+    <PackageReference Include="WorkflowCore" Version="$(WorkflowCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftExtensionsVersion)" />
+  </ItemGroup>
+
+</Project>

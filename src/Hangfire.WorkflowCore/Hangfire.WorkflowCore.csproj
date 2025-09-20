@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <PackageId>Hangfire.WorkflowCore</PackageId>
+    <Description>Seamless integration between Hangfire and Workflow Core for advanced job orchestration</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire.Core" Version="$(HangfireVersion)" />
+    <PackageReference Include="WorkflowCore" Version="$(WorkflowCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(MicrosoftExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsVersion)" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Hangfire.WorkflowCore.Abstractions\Hangfire.WorkflowCore.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

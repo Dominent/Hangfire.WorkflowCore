@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{154CCD34-5877-4D98-98CD-39EB023581D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangfire.WorkflowCore.Abstractions", "src\Hangfire.WorkflowCore.Abstractions\Hangfire.WorkflowCore.Abstractions.csproj", "{AB18F5D4-5C43-49D8-8ECB-390615B96E72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangfire.WorkflowCore", "src\Hangfire.WorkflowCore\Hangfire.WorkflowCore.csproj", "{6537729B-9EA2-4886-9924-1F081B20FB45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4EFA170F-9280-4243-AB8E-9E6AB72E7ED5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangfire.WorkflowCore.Tests", "tests\Hangfire.WorkflowCore.Tests\Hangfire.WorkflowCore.Tests.csproj", "{17EA7DA6-1706-455C-974A-1AA203738A61}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{C4E89263-63A7-4552-8DAE-484669F15381}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoProcessing", "samples\VideoProcessing\VideoProcessing.csproj", "{609CD7EF-1512-4454-B602-F015197E12B3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB18F5D4-5C43-49D8-8ECB-390615B96E72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB18F5D4-5C43-49D8-8ECB-390615B96E72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB18F5D4-5C43-49D8-8ECB-390615B96E72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB18F5D4-5C43-49D8-8ECB-390615B96E72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6537729B-9EA2-4886-9924-1F081B20FB45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6537729B-9EA2-4886-9924-1F081B20FB45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6537729B-9EA2-4886-9924-1F081B20FB45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6537729B-9EA2-4886-9924-1F081B20FB45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17EA7DA6-1706-455C-974A-1AA203738A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17EA7DA6-1706-455C-974A-1AA203738A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17EA7DA6-1706-455C-974A-1AA203738A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17EA7DA6-1706-455C-974A-1AA203738A61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{609CD7EF-1512-4454-B602-F015197E12B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{609CD7EF-1512-4454-B602-F015197E12B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{609CD7EF-1512-4454-B602-F015197E12B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{609CD7EF-1512-4454-B602-F015197E12B3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AB18F5D4-5C43-49D8-8ECB-390615B96E72} = {154CCD34-5877-4D98-98CD-39EB023581D7}
+		{6537729B-9EA2-4886-9924-1F081B20FB45} = {154CCD34-5877-4D98-98CD-39EB023581D7}
+		{17EA7DA6-1706-455C-974A-1AA203738A61} = {4EFA170F-9280-4243-AB8E-9E6AB72E7ED5}
+		{609CD7EF-1512-4454-B602-F015197E12B3} = {C4E89263-63A7-4552-8DAE-484669F15381}
+	EndGlobalSection
+EndGlobal
