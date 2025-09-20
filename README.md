@@ -14,6 +14,8 @@ A powerful integration library that combines [Hangfire](https://www.hangfire.io/
 - 🛡️ **Reliable Execution** - Built on Hangfire's proven reliability and persistence
 - 🏗️ **Clean Architecture** - Well-defined abstractions and interfaces for extensibility
 - 📊 **Production Ready** - Comprehensive error handling, logging, and monitoring support
+- ⚡ **Simplified Setup** - One-line configuration with full Hangfire and WorkflowCore control
+- 🔧 **No Defaults** - Explicit configuration required with clear error messages
 
 ## Quick Start
 
@@ -32,13 +34,17 @@ dotnet add package Hangfire.WorkflowCore.Abstractions
 1. **Configure Services**
 
 ```csharp
-services.AddHangfire(config => config.UseMemoryStorage());
-services.AddHangfireServer();
-services.AddWorkflow();
-
-// Add your storage bridge implementation
-services.AddSingleton<IWorkflowStorageBridge, YourStorageBridge>();
-services.AddSingleton<IWorkflowInstanceProvider, YourInstanceProvider>();
+// Simple one-line setup with explicit configuration
+services.AddHangfireWorkflowCore(
+    // Configure Hangfire (storage, dashboard, etc.)
+    hangfire => hangfire.UseMemoryStorage(),
+    
+    // Configure WorkflowCore integration components  
+    workflow =>
+    {
+        workflow.UseStorageBridge<YourStorageBridge>();
+        workflow.UseInstanceProvider<YourInstanceProvider>();
+    });
 ```
 
 2. **Define a Workflow**
@@ -127,6 +133,11 @@ public class PostgreSqlWorkflowStorageBridge : IWorkflowStorageBridge
     
     // Implement other interface methods...
 }
+
+// Register in your configuration
+services.AddHangfireWorkflowCore(
+    hangfire => hangfire.UseSqlServerStorage("connection-string"),
+    workflow => workflow.UseStorageBridge<PostgreSqlWorkflowStorageBridge>());
 ```
 
 ### Error Handling
@@ -213,7 +224,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Core workflow execution capabilities
 - Background job scheduling extensions
 - Recurring workflow support
-- Comprehensive test suite
+- Simplified one-line setup with `AddHangfireWorkflowCore()`
+- Job ID bug fix using TDD approach with PerformContext injection
+- Comprehensive test suite (30 tests)
 - Sample applications
 
 ## Support

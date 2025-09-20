@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Hangfire.Server;
 using WorkflowCore.Interface;
 
 namespace Hangfire.WorkflowCore.Extensions;
@@ -22,7 +23,7 @@ public static class BackgroundJobWorkflow
         var jsonData = JsonSerializer.Serialize(data);
         
         return Hangfire.BackgroundJob.Enqueue<WorkflowJob<TWorkflow, TData>>(
-            job => job.ExecuteAsync(null!, jsonData, CancellationToken.None));
+            job => job.ExecuteWithContextAsync(null, jsonData, CancellationToken.None));
     }
 
     /// <summary>
@@ -40,7 +41,7 @@ public static class BackgroundJobWorkflow
         var jsonData = JsonSerializer.Serialize(data);
         
         return Hangfire.BackgroundJob.Schedule<WorkflowJob<TWorkflow, TData>>(
-            job => job.ExecuteAsync(null!, jsonData, CancellationToken.None),
+            job => job.ExecuteWithContextAsync(null, jsonData, CancellationToken.None),
             delay);
     }
 
@@ -59,7 +60,7 @@ public static class BackgroundJobWorkflow
         var jsonData = JsonSerializer.Serialize(data);
         
         return Hangfire.BackgroundJob.Schedule<WorkflowJob<TWorkflow, TData>>(
-            job => job.ExecuteAsync(null!, jsonData, CancellationToken.None),
+            job => job.ExecuteWithContextAsync(null, jsonData, CancellationToken.None),
             enqueueAt);
     }
 
@@ -79,7 +80,7 @@ public static class BackgroundJobWorkflow
         
         return Hangfire.BackgroundJob.ContinueJobWith<WorkflowJob<TWorkflow, TData>>(
             parentJobId,
-            job => job.ExecuteAsync(null!, jsonData, CancellationToken.None));
+            job => job.ExecuteWithContextAsync(null, jsonData, CancellationToken.None));
     }
 }
 
@@ -109,7 +110,7 @@ public static class RecurringJobWorkflow
         
         Hangfire.RecurringJob.AddOrUpdate<WorkflowJob<TWorkflow, TData>>(
             recurringJobId,
-            job => job.ExecuteAsync(null!, jsonData, CancellationToken.None),
+            job => job.ExecuteWithContextAsync(null, jsonData, CancellationToken.None),
             cronExpression,
             options ?? new RecurringJobOptions());
     }

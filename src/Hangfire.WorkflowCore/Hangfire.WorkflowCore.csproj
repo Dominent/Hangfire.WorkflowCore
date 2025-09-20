@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Hangfire.Core" Version="$(HangfireVersion)" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="$(HangfireVersion)" />
     <PackageReference Include="WorkflowCore" Version="$(WorkflowCoreVersion)" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(MicrosoftExtensionsVersion)" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsVersion)" />

@@ -50,7 +50,7 @@
   },
   "homepage": "https://github.com/username/Hangfire.WorkflowCore#readme",
   "devDependencies": {
-    "chalk": "^5.3.0",
+    "chalk": "^4.1.2",
     "commander": "^11.1.0",
     "cross-spawn": "^7.0.3",
     "fs-extra": "^11.1.1",

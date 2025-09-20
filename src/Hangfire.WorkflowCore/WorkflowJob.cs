@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Hangfire.Server;
 using Hangfire.WorkflowCore.Abstractions;
 using Microsoft.Extensions.Logging;
 using WorkflowCore.Interface;
@@ -43,6 +44,27 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
 
     /// <inheritdoc />
     public async Task<WorkflowExecutionResult> ExecuteAsync(string jobId, string data, CancellationToken cancellationToken = default)
+    {
+        return await ExecuteInternalAsync(jobId, data, cancellationToken);
+    }
+
+    /// <summary>
+    /// Executes the workflow using PerformContext to get the job ID
+    /// </summary>
+    /// <param name="context">The Hangfire perform context</param>
+    /// <param name="data">The serialized workflow data</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The workflow execution result</returns>
+    public async Task<WorkflowExecutionResult> ExecuteWithContextAsync(PerformContext? context, string data, CancellationToken cancellationToken = default)
+    {
+        var jobId = context?.BackgroundJob?.Id ?? "unknown";
+        return await ExecuteInternalAsync(jobId, data, cancellationToken);
+    }
+
+    /// <summary>
+    /// Internal method that performs the actual workflow execution
+    /// </summary>
+    private async Task<WorkflowExecutionResult> ExecuteInternalAsync(string jobId, string data, CancellationToken cancellationToken = default)
     {
         _jobId = jobId;
         

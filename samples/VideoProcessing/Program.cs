@@ -19,19 +19,17 @@ builder.ConfigureServices((context, services) =>
     // Add logging
     services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(LogLevel.Information));
     
-    // Add Hangfire with in-memory storage
-    services.AddHangfire(config =>
-    {
-        config.UseMemoryStorage();
-    });
-    services.AddHangfireServer();
-
-    // Add WorkflowCore
-    services.AddWorkflow();
-    
-    // Add our abstractions (mock implementations for demo)
-    services.AddSingleton<IWorkflowStorageBridge, MockWorkflowStorageBridge>();
-    services.AddSingleton<IWorkflowInstanceProvider, MockWorkflowInstanceProvider>();
+    // Add Hangfire.WorkflowCore with all necessary configurations
+    services.AddHangfireWorkflowCore(
+        // Configure Hangfire (storage, dashboard, etc.)
+        hangfireConfig => hangfireConfig.UseMemoryStorage(),
+        
+        // Configure WorkflowCore integration components
+        workflowOptions =>
+        {
+            workflowOptions.UseStorageBridge<MockWorkflowStorageBridge>();
+            workflowOptions.UseInstanceProvider<MockWorkflowInstanceProvider>();
+        });
 });
 
 var host = builder.Build();
