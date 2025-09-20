@@ -21,7 +21,7 @@ public class HttpContextWorkflowJob<TWorkflow, TData> : IWorkflowJob
     private readonly IWorkflowInstanceProvider _workflowInstanceProvider;
     private readonly IHttpContextSnapshotProvider _httpContextProvider;
     private readonly ILogger<HttpContextWorkflowJob<TWorkflow, TData>> _logger;
-    
+
     private string? _workflowInstanceId;
     private string? _jobId;
 
@@ -70,8 +70,8 @@ public class HttpContextWorkflowJob<TWorkflow, TData> : IWorkflowJob
     private async Task<WorkflowExecutionResult> ExecuteWithHttpContextInternalAsync(string jobId, string data, CancellationToken cancellationToken = default)
     {
         _jobId = jobId;
-        
-        _logger.LogInformation("Starting workflow {WorkflowType} with HttpContext for job {JobId}", 
+
+        _logger.LogInformation("Starting workflow {WorkflowType} with HttpContext for job {JobId}",
             typeof(TWorkflow).Name, jobId);
 
         try
@@ -89,7 +89,7 @@ public class HttpContextWorkflowJob<TWorkflow, TData> : IWorkflowJob
             catch (JsonException ex)
             {
                 _logger.LogError(ex, "Failed to deserialize JSON data for job {JobId}", jobId);
-                
+
                 return new WorkflowExecutionResult
                 {
                     WorkflowInstanceId = string.Empty,
@@ -101,7 +101,7 @@ public class HttpContextWorkflowJob<TWorkflow, TData> : IWorkflowJob
 
             // Get HttpContext snapshot
             var httpContextSnapshot = _httpContextProvider.GetCurrentSnapshot();
-            
+
             // Wrap data with HttpContext
             var dataWithContext = new WorkflowDataWithContext<TData>
             {
@@ -112,8 +112,8 @@ public class HttpContextWorkflowJob<TWorkflow, TData> : IWorkflowJob
             // Start the workflow with enhanced data
             var workflowInstanceId = await _workflowHost.StartWorkflow(typeof(TWorkflow).Name, dataWithContext);
             _workflowInstanceId = workflowInstanceId;
-            
-            _logger.LogDebug("Workflow instance {WorkflowInstanceId} started with HttpContext for job {JobId}", 
+
+            _logger.LogDebug("Workflow instance {WorkflowInstanceId} started with HttpContext for job {JobId}",
                 workflowInstanceId, jobId);
 
             // Store the job-to-workflow mapping
@@ -125,7 +125,7 @@ public class HttpContextWorkflowJob<TWorkflow, TData> : IWorkflowJob
             // Store the result
             await _storageBridge.StoreWorkflowResultAsync(workflowInstanceId, result);
 
-            _logger.LogInformation("Workflow {WorkflowInstanceId} completed with status {Status}", 
+            _logger.LogInformation("Workflow {WorkflowInstanceId} completed with status {Status}",
                 workflowInstanceId, result.Status);
 
             return result;
@@ -138,7 +138,7 @@ public class HttpContextWorkflowJob<TWorkflow, TData> : IWorkflowJob
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error executing workflow for job {JobId}", jobId);
-            
+
             var errorResult = new WorkflowExecutionResult
             {
                 WorkflowInstanceId = _workflowInstanceId ?? string.Empty,
@@ -157,14 +157,14 @@ public class HttpContextWorkflowJob<TWorkflow, TData> : IWorkflowJob
     }
 
     private async Task<WorkflowExecutionResult> WaitForWorkflowCompletionAsync(
-        string workflowInstanceId, 
+        string workflowInstanceId,
         CancellationToken cancellationToken)
     {
         // Poll for workflow completion
         while (!cancellationToken.IsCancellationRequested)
         {
             var instance = await _workflowInstanceProvider.GetWorkflowInstanceAsync(workflowInstanceId);
-            
+
             if (instance == null)
             {
                 return new WorkflowExecutionResult

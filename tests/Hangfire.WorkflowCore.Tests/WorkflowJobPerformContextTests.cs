@@ -24,7 +24,7 @@ public class WorkflowJobPerformContextTests
         _storageBridge = Substitute.For<IWorkflowStorageBridge>();
         _workflowInstanceProvider = Substitute.For<IWorkflowInstanceProvider>();
         _logger = Substitute.For<ILogger<WorkflowJob<TestWorkflow, TestData>>>();
-        
+
         // Create a mock BackgroundJob with proper structure
         var backgroundJob = new BackgroundJob("test-job-123", Job.FromExpression(() => Console.WriteLine()), DateTime.UtcNow);
         var cancellationToken = Substitute.For<IJobCancellationToken>();
@@ -41,12 +41,12 @@ public class WorkflowJobPerformContextTests
         var data = new TestData { Name = "Test", Value = 42 };
         var jsonData = System.Text.Json.JsonSerializer.Serialize(data);
         var workflowInstanceId = "workflow-instance-456";
-        
+
         // PerformContext is now a real object with the expected job ID
-        
+
         _workflowHost.StartWorkflow(typeof(TestWorkflow).Name, Arg.Any<TestData>())
             .Returns(Task.FromResult(workflowInstanceId));
-        
+
         var workflowInstance = new WorkflowInstance
         {
             Id = workflowInstanceId,
@@ -54,21 +54,21 @@ public class WorkflowJobPerformContextTests
             CompleteTime = DateTime.UtcNow,
             Data = data
         };
-        
+
         _workflowInstanceProvider.GetWorkflowInstanceAsync(workflowInstanceId)
             .Returns(Task.FromResult<WorkflowInstance?>(workflowInstance));
-        
+
         var workflowJob = new WorkflowJob<TestWorkflow, TestData>(
             _workflowHost, _storageBridge, _workflowInstanceProvider, _logger);
-        
+
         // Act
         var result = await workflowJob.ExecuteWithContextAsync(_performContext, jsonData);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Status.Should().Be(WorkflowStatus.Complete);
         result.WorkflowInstanceId.Should().Be(workflowInstanceId);
-        
+
         // Verify that the storage bridge was called with the correct job ID from context
         await _storageBridge.Received(1).StoreJobWorkflowMappingAsync(expectedJobId, workflowInstanceId);
     }

@@ -11,12 +11,12 @@ public interface IWorkflowJob
     /// Gets the workflow instance identifier
     /// </summary>
     string? WorkflowInstanceId { get; }
-    
+
     /// <summary>
     /// Gets the Hangfire job identifier
     /// </summary>
     string? JobId { get; }
-    
+
     /// <summary>
     /// Executes the workflow with the provided data
     /// </summary>
@@ -36,27 +36,27 @@ public class WorkflowExecutionResult
     /// Gets or sets the workflow instance ID
     /// </summary>
     public string WorkflowInstanceId { get; set; } = string.Empty;
-    
+
     /// <summary>
     /// Gets or sets the workflow status using WorkflowCore enum
     /// </summary>
     public WorkflowStatus Status { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the result data
     /// </summary>
     public object? Data { get; set; }
-    
+
     /// <summary>
     /// Gets or sets any error message if the workflow failed
     /// </summary>
     public string? ErrorMessage { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the completion time
     /// </summary>
     public DateTime? CompletedAt { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the creation time
     /// </summary>

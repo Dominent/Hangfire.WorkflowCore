@@ -27,17 +27,17 @@ public class BackgroundJobWorkflowJobIdTests : IDisposable
         // The issue is that Hangfire doesn't automatically inject job IDs into custom parameters.
         // We need to use either PerformContext or create a different method signature.
         // Let's verify that our WorkflowJob has a method that can receive the job context.
-        
+
         // Arrange
         var workflowJobType = typeof(WorkflowJob<TestWorkflow, TestWorkflowData>);
-        
+
         // Act
         var executeMethod = workflowJobType.GetMethod("ExecuteAsync");
-        
+
         // Assert
         executeMethod.Should().NotBeNull();
         var parameters = executeMethod!.GetParameters();
-        
+
         // For now, this test will fail because we haven't implemented the fix yet
         // The fix will be to modify WorkflowJob to get job ID from PerformContext
         parameters.Should().HaveCount(3); // jobId, data, cancellationToken

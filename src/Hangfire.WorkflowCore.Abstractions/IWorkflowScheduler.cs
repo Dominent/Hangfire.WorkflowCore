@@ -13,7 +13,7 @@ public interface IWorkflowScheduler
     /// <param name="queueName">Optional queue name</param>
     /// <returns>The Hangfire job ID</returns>
     string EnqueueWorkflow<TData>(string workflowId, TData data, string? queueName = null) where TData : class;
-    
+
     /// <summary>
     /// Schedules a workflow to run after a delay
     /// </summary>
@@ -23,7 +23,7 @@ public interface IWorkflowScheduler
     /// <param name="queueName">Optional queue name</param>
     /// <returns>The Hangfire job ID</returns>
     string ScheduleWorkflow<TData>(string workflowId, TData data, TimeSpan delay, string? queueName = null) where TData : class;
-    
+
     /// <summary>
     /// Schedules a workflow to run at a specific time
     /// </summary>
@@ -33,7 +33,7 @@ public interface IWorkflowScheduler
     /// <param name="queueName">Optional queue name</param>
     /// <returns>The Hangfire job ID</returns>
     string ScheduleWorkflow<TData>(string workflowId, TData data, DateTimeOffset enqueueAt, string? queueName = null) where TData : class;
-    
+
     /// <summary>
     /// Adds or updates a recurring workflow
     /// </summary>
@@ -43,13 +43,13 @@ public interface IWorkflowScheduler
     /// <param name="cronExpression">The CRON expression</param>
     /// <param name="queueName">Optional queue name</param>
     void AddOrUpdateRecurringWorkflow<TData>(string recurringJobId, string workflowId, TData data, string cronExpression, string? queueName = null) where TData : class;
-    
+
     /// <summary>
     /// Removes a recurring workflow
     /// </summary>
     /// <param name="recurringJobId">The recurring job ID</param>
     void RemoveRecurringWorkflow(string recurringJobId);
-    
+
     /// <summary>
     /// Continues with a workflow after a job completes
     /// </summary>
@@ -59,20 +59,20 @@ public interface IWorkflowScheduler
     /// <param name="queueName">Optional queue name</param>
     /// <returns>The continuation job ID</returns>
     string ContinueWorkflowWith<TData>(string parentJobId, string workflowId, TData data, string? queueName = null) where TData : class;
-    
+
     /// <summary>
     /// Creates a batch of workflows
     /// </summary>
     /// <returns>A workflow batch builder</returns>
     IWorkflowBatch CreateBatch();
-    
+
     /// <summary>
     /// Deletes a scheduled job
     /// </summary>
     /// <param name="jobId">The job ID to delete</param>
     /// <returns>True if deleted successfully</returns>
     bool DeleteJob(string jobId);
-    
+
     /// <summary>
     /// Requeues a failed job
     /// </summary>
@@ -94,7 +94,7 @@ public interface IWorkflowBatch
     /// <param name="name">Optional name for the job</param>
     /// <returns>The batch for fluent chaining</returns>
     IWorkflowBatch Add<TData>(string workflowId, TData data, string? name = null) where TData : class;
-    
+
     /// <summary>
     /// Adds a continuation workflow that runs after all batch jobs complete
     /// </summary>
@@ -102,13 +102,13 @@ public interface IWorkflowBatch
     /// <param name="data">The workflow data</param>
     /// <returns>The batch for fluent chaining</returns>
     IWorkflowBatch ContinueWith<TData>(string workflowId, TData data) where TData : class;
-    
+
     /// <summary>
     /// Enqueues the batch
     /// </summary>
     /// <returns>The batch ID</returns>
     Task<string> EnqueueAsync();
-    
+
     /// <summary>
     /// Gets the number of jobs in the batch
     /// </summary>

@@ -18,45 +18,45 @@ public class AspNetCoreBackgroundJobWorkflowExtensionsTests
     {
         // Arrange - This test should fail initially because the extension method doesn't exist yet
         var testData = new TestWorkflowData { Name = "Test", Value = 42 };
-        
+
         // Act & Assert - This should fail compilation until we implement the extension method
         var act = () => BackgroundJobWorkflow.Instance.EnqueueWithHttpContext<TestHttpContextWorkflow, TestWorkflowData>(testData);
-        
+
         // We expect this to eventually return a job ID when implemented
         act.Should().NotThrow("Extension method should be available on BackgroundJobWorkflow");
     }
-    
+
     [Fact]
     public void BackgroundJobWorkflow_Should_Have_ScheduleWorkflowWithHttpContext_Extension_Method()
     {
         // Arrange - This test should fail initially
         var testData = new TestWorkflowData { Name = "Test", Value = 42 };
         var delay = TimeSpan.FromMinutes(5);
-        
+
         // Act & Assert - This should fail compilation until we implement the extension method
         var act = () => BackgroundJobWorkflow.Instance.ScheduleWithHttpContext<TestHttpContextWorkflow, TestWorkflowData>(testData, delay);
-        
+
         // We expect this to eventually return a job ID when implemented
         act.Should().NotThrow("Extension method should be available on BackgroundJobWorkflow");
     }
-    
-    [Fact] 
+
+    [Fact]
     public void BackgroundJobWorkflow_Should_Have_ContinueWorkflowWithHttpContext_Extension_Method()
     {
         // Arrange - This test should fail initially
         GlobalConfiguration.Configuration.UseMemoryStorage();
-        
+
         // Create a valid parent job first
         var parentJobId = BackgroundJob.Enqueue(() => Console.WriteLine("Parent job"));
         var testData = new TestWorkflowData { Name = "Test", Value = 42 };
-        
+
         // Act & Assert - This should fail compilation until we implement the extension method
         var act = () => BackgroundJobWorkflow.Instance.ContinueWithHttpContext<TestHttpContextWorkflow, TestWorkflowData>(parentJobId, testData);
-        
+
         // We expect this to eventually return a job ID when implemented
         act.Should().NotThrow("Extension method should be available on BackgroundJobWorkflow");
     }
-    
+
     [Fact]
     public void EnqueueWithHttpContext_Should_Capture_Current_HttpContext_When_Available()
     {
@@ -66,15 +66,15 @@ public class AspNetCoreBackgroundJobWorkflowExtensionsTests
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Path = "/api/test";
         httpContext.Request.Method = "POST";
-        
+
         var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         httpContextAccessor.HttpContext.Returns(httpContext);
-        
+
         services.AddSingleton(httpContextAccessor);
         services.AddSingleton<IHttpContextSnapshotProvider, AspNetCoreHttpContextSnapshotProvider>();
-        
+
         GlobalConfiguration.Configuration.UseMemoryStorage();
-        
+
         var testData = new TestWorkflowData { Name = "Test", Value = 42 };
 
         // Act - Now this should work (Green phase)
@@ -82,7 +82,7 @@ public class AspNetCoreBackgroundJobWorkflowExtensionsTests
 
         // Assert
         jobId.Should().NotBeNullOrEmpty();
-        
+
         // Verify that the job was created with HttpContext integration
         // This will initially fail because the extension method doesn't exist yet
     }
@@ -94,12 +94,12 @@ public class AspNetCoreBackgroundJobWorkflowExtensionsTests
         var services = new ServiceCollection();
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Path = "/api/schedule";
-        
+
         var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         httpContextAccessor.HttpContext.Returns(httpContext);
-        
+
         GlobalConfiguration.Configuration.UseMemoryStorage();
-        
+
         var testData = new TestWorkflowData { Name = "Scheduled", Value = 100 };
         var delay = TimeSpan.FromMinutes(5);
 
@@ -115,10 +115,10 @@ public class AspNetCoreBackgroundJobWorkflowExtensionsTests
     {
         // Arrange
         GlobalConfiguration.Configuration.UseMemoryStorage();
-        
+
         var parentData = new TestWorkflowData { Name = "Parent", Value = 1 };
         var childData = new TestWorkflowData { Name = "Child", Value = 2 };
-        
+
         var parentJobId = BackgroundJob.Enqueue(() => Console.WriteLine("Parent job"));
 
         // Act - Now this should work (Green phase)
@@ -134,7 +134,7 @@ public class AspNetCoreBackgroundJobWorkflowExtensionsTests
     {
         // Arrange
         GlobalConfiguration.Configuration.UseMemoryStorage();
-        
+
         var testData = new TestWorkflowData { Name = "Recurring", Value = 999 };
         var cronExpression = "0 9 * * *"; // Daily at 9 AM
 
@@ -179,7 +179,7 @@ public class TestHttpContextStep : StepBody
             // HttpContext is available in background job
             Console.WriteLine($"Processing in background with request path: {dataWithContext.HttpContext.RequestPath}");
         }
-        
+
         return ExecutionResult.Next();
     }
 }

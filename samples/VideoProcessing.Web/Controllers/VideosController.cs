@@ -75,7 +75,7 @@ public class VideosController : ControllerBase
     [HttpPost("schedule")]
     public ActionResult<VideoProcessResponse> ScheduleVideo([FromBody] VideoScheduleRequest request)
     {
-        _logger.LogInformation("Scheduling video: {VideoId} for {DelayMinutes} minutes", 
+        _logger.LogInformation("Scheduling video: {VideoId} for {DelayMinutes} minutes",
             request.VideoId, request.DelayMinutes);
 
         var videoData = new VideoData
@@ -116,9 +116,9 @@ public class VideosController : ControllerBase
     [HttpGet("health")]
     public ActionResult<object> Health()
     {
-        return Ok(new 
-        { 
-            Status = "Healthy", 
+        return Ok(new
+        {
+            Status = "Healthy",
             Timestamp = DateTime.UtcNow,
             Service = "Video Processing API"
         });

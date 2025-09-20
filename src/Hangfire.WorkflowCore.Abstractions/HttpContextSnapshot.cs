@@ -9,42 +9,42 @@ public class HttpContextSnapshot
     /// Gets or sets the request path
     /// </summary>
     public string? RequestPath { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the HTTP method
     /// </summary>
     public string? Method { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the request headers
     /// </summary>
     public Dictionary<string, string> Headers { get; set; } = new();
-    
+
     /// <summary>
     /// Gets or sets the user claims
     /// </summary>
     public Dictionary<string, string> Claims { get; set; } = new();
-    
+
     /// <summary>
     /// Gets or sets the user ID
     /// </summary>
     public string? UserId { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the request ID for tracking
     /// </summary>
     public string? RequestId { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the remote IP address
     /// </summary>
     public string? RemoteIpAddress { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the user agent
     /// </summary>
     public string? UserAgent { get; set; }
-    
+
     /// <summary>
     /// Gets or sets when this snapshot was created
     /// </summary>
@@ -71,12 +71,12 @@ public class WorkflowDataWithContext<TData> where TData : class
     /// Gets or sets the original workflow data
     /// </summary>
     public TData Data { get; set; } = default!;
-    
+
     /// <summary>
     /// Gets or sets the HttpContext snapshot
     /// </summary>
     public HttpContextSnapshot? HttpContext { get; set; }
-    
+
     /// <summary>
     /// Gets or sets when this was created
     /// </summary>

@@ -65,12 +65,12 @@ public class HttpContextWorkflowJobTests
 
         // Assert
         result.Should().NotBeNull();
-        
+
         // Verify that StartWorkflow was called with enhanced data that includes HttpContext
         await _workflowHost.Received(1).StartWorkflow(
             typeof(HttpContextTestWorkflow).Name,
-            Arg.Is<WorkflowDataWithContext<HttpContextTestData>>(data => 
-                data.Data.Name == "Test" && 
+            Arg.Is<WorkflowDataWithContext<HttpContextTestData>>(data =>
+                data.Data.Name == "Test" &&
                 data.Data.Value == 42 &&
                 data.HttpContext != null &&
                 data.HttpContext.RequestPath == "/api/test" &&
@@ -110,12 +110,12 @@ public class HttpContextWorkflowJobTests
 
         // Assert
         result.Should().NotBeNull();
-        
+
         // Verify that StartWorkflow was called with enhanced data where HttpContext is null
         await _workflowHost.Received(1).StartWorkflow(
             typeof(HttpContextTestWorkflow).Name,
-            Arg.Is<WorkflowDataWithContext<HttpContextTestData>>(data => 
-                data.Data.Name == "Test" && 
+            Arg.Is<WorkflowDataWithContext<HttpContextTestData>>(data =>
+                data.Data.Name == "Test" &&
                 data.Data.Value == 42 &&
                 data.HttpContext == null));
     }

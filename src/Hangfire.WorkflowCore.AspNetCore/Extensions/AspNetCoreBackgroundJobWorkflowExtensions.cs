@@ -21,7 +21,7 @@ public static class BackgroundJobWorkflowExtensions
         where TData : class, new()
     {
         var jsonData = JsonSerializer.Serialize(data);
-        
+
         return Hangfire.BackgroundJob.Enqueue<HttpContextWorkflowJob<TWorkflow, TData>>(
             job => job.ExecuteWithHttpContextAsync(null, jsonData, CancellationToken.None));
     }
@@ -39,7 +39,7 @@ public static class BackgroundJobWorkflowExtensions
         where TData : class, new()
     {
         var jsonData = JsonSerializer.Serialize(data);
-        
+
         return Hangfire.BackgroundJob.Schedule<HttpContextWorkflowJob<TWorkflow, TData>>(
             job => job.ExecuteWithHttpContextAsync(null, jsonData, CancellationToken.None),
             delay);
@@ -58,7 +58,7 @@ public static class BackgroundJobWorkflowExtensions
         where TData : class, new()
     {
         var jsonData = JsonSerializer.Serialize(data);
-        
+
         return Hangfire.BackgroundJob.Schedule<HttpContextWorkflowJob<TWorkflow, TData>>(
             job => job.ExecuteWithHttpContextAsync(null, jsonData, CancellationToken.None),
             enqueueAt);
@@ -77,7 +77,7 @@ public static class BackgroundJobWorkflowExtensions
         where TData : class, new()
     {
         var jsonData = JsonSerializer.Serialize(data);
-        
+
         return Hangfire.BackgroundJob.ContinueJobWith<HttpContextWorkflowJob<TWorkflow, TData>>(
             parentJobId,
             job => job.ExecuteWithHttpContextAsync(null, jsonData, CancellationToken.None));
@@ -164,7 +164,7 @@ public static class RecurringJobWorkflowHttpContextExtensions
         where TData : class, new()
     {
         var jsonData = JsonSerializer.Serialize(data);
-        
+
         Hangfire.RecurringJob.AddOrUpdate<HttpContextWorkflowJob<TWorkflow, TData>>(
             recurringJobId,
             job => job.ExecuteWithHttpContextAsync(null, jsonData, CancellationToken.None),

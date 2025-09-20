@@ -21,14 +21,14 @@ builder.Services.AddHttpContextAccessor();
 // Add complete Hangfire.WorkflowCore with ASP.NET Core integration (one-liner setup!)
 builder.Services.AddHangfireWorkflowCoreAspNetCore(
     // Configure Hangfire
-    hangfireConfig => 
+    hangfireConfig =>
     {
         hangfireConfig.UseMemoryStorage();
         hangfireConfig.SetDataCompatibilityLevel(CompatibilityLevel.Version_180);
         hangfireConfig.UseSimpleAssemblyNameTypeSerializer();
         hangfireConfig.UseRecommendedSerializerSettings();
     },
-    
+
     // Configure WorkflowCore integration components
     workflowOptions =>
     {

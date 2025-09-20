@@ -72,7 +72,7 @@ public class MockWorkflowInstanceProvider : IWorkflowInstanceProvider
     {
         // Simulate getting workflow instance
         await Task.Delay(100);
-        
+
         return new WorkflowInstance
         {
             Id = workflowInstanceId,

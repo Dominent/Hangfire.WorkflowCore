@@ -13,7 +13,7 @@ public sealed class BackgroundJobWorkflow
     /// Gets the singleton instance of BackgroundJobWorkflow
     /// </summary>
     public static BackgroundJobWorkflow Instance { get; } = new();
-    
+
     /// <summary>
     /// Private constructor to enforce singleton pattern
     /// </summary>
@@ -31,7 +31,7 @@ public sealed class BackgroundJobWorkflow
         where TData : class, new()
     {
         var jsonData = JsonSerializer.Serialize(data);
-        
+
         return Hangfire.BackgroundJob.Enqueue<WorkflowJob<TWorkflow, TData>>(
             job => job.ExecuteWithContextAsync(null, jsonData, CancellationToken.None));
     }
@@ -49,7 +49,7 @@ public sealed class BackgroundJobWorkflow
         where TData : class, new()
     {
         var jsonData = JsonSerializer.Serialize(data);
-        
+
         return Hangfire.BackgroundJob.Schedule<WorkflowJob<TWorkflow, TData>>(
             job => job.ExecuteWithContextAsync(null, jsonData, CancellationToken.None),
             delay);
@@ -68,7 +68,7 @@ public sealed class BackgroundJobWorkflow
         where TData : class, new()
     {
         var jsonData = JsonSerializer.Serialize(data);
-        
+
         return Hangfire.BackgroundJob.Schedule<WorkflowJob<TWorkflow, TData>>(
             job => job.ExecuteWithContextAsync(null, jsonData, CancellationToken.None),
             enqueueAt);
@@ -87,7 +87,7 @@ public sealed class BackgroundJobWorkflow
         where TData : class, new()
     {
         var jsonData = JsonSerializer.Serialize(data);
-        
+
         return Hangfire.BackgroundJob.ContinueJobWith<WorkflowJob<TWorkflow, TData>>(
             parentJobId,
             job => job.ExecuteWithContextAsync(null, jsonData, CancellationToken.None));
@@ -103,7 +103,7 @@ public sealed class RecurringJobWorkflow
     /// Gets the singleton instance of RecurringJobWorkflow
     /// </summary>
     public static RecurringJobWorkflow Instance { get; } = new();
-    
+
     /// <summary>
     /// Private constructor to enforce singleton pattern
     /// </summary>
@@ -127,7 +127,7 @@ public sealed class RecurringJobWorkflow
         where TData : class, new()
     {
         var jsonData = JsonSerializer.Serialize(data);
-        
+
         Hangfire.RecurringJob.AddOrUpdate<WorkflowJob<TWorkflow, TData>>(
             recurringJobId,
             job => job.ExecuteWithContextAsync(null, jsonData, CancellationToken.None),

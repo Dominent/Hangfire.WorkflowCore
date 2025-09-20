@@ -15,7 +15,7 @@ public class WorkflowCoreOptions
 {
     internal Type? CustomStorageBridgeType { get; set; }
     internal Type? CustomInstanceProviderType { get; set; }
-    
+
     /// <summary>
     /// Use a custom implementation of IWorkflowStorageBridge
     /// </summary>
@@ -25,7 +25,7 @@ public class WorkflowCoreOptions
         CustomStorageBridgeType = typeof(T);
         return this;
     }
-    
+
     /// <summary>
     /// Use a custom implementation of IWorkflowInstanceProvider
     /// </summary>
@@ -57,14 +57,14 @@ public static class ServiceCollectionExtensions
         // Configure Hangfire with user's configuration
         services.AddHangfire(configureHangfire);
         services.AddHangfireServer();
-        
+
         // Configure WorkflowCore
         services.AddWorkflow();
-        
+
         // Configure our integration components
         var workflowOptions = new WorkflowCoreOptions();
         configureWorkflowCore(workflowOptions);
-        
+
         // Register storage bridge - REQUIRED
         if (workflowOptions.CustomStorageBridgeType == null)
         {
@@ -72,9 +72,9 @@ public static class ServiceCollectionExtensions
                 "Workflow storage bridge is required. Please call UseStorageBridge<T>() to specify your storage implementation. " +
                 "Example: workflowOptions.UseStorageBridge<MyWorkflowStorageBridge>()");
         }
-        
+
         services.AddSingleton(typeof(IWorkflowStorageBridge), workflowOptions.CustomStorageBridgeType);
-        
+
         // Register instance provider - REQUIRED
         if (workflowOptions.CustomInstanceProviderType == null)
         {
@@ -82,12 +82,12 @@ public static class ServiceCollectionExtensions
                 "Workflow instance provider is required. Please call UseInstanceProvider<T>() to specify your provider implementation. " +
                 "Example: workflowOptions.UseInstanceProvider<MyWorkflowInstanceProvider>()");
         }
-        
+
         services.AddSingleton(typeof(IWorkflowInstanceProvider), workflowOptions.CustomInstanceProviderType);
-        
+
         // Register default null HttpContext provider (can be overridden by ASP.NET Core package)
         services.TryAddSingleton<IHttpContextSnapshotProvider, NullHttpContextSnapshotProvider>();
-        
+
         return services;
     }
 }

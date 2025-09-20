@@ -18,17 +18,17 @@ public class ServiceCollectionExtensionsTests
         // Arrange
         var services = new ServiceCollection();
         services.AddLogging(); // Add logging for WorkflowCore
-        
+
         // Act
         services.AddHangfireWorkflowCore(
             hangfire => hangfire.UseMemoryStorage(),
-            workflow => 
+            workflow =>
             {
                 workflow.UseStorageBridge<MockWorkflowStorageBridge>();
                 workflow.UseInstanceProvider<MockWorkflowInstanceProvider>();
             });
         var serviceProvider = services.BuildServiceProvider();
-        
+
         // Assert
         serviceProvider.GetService<IWorkflowHost>().Should().NotBeNull();
         serviceProvider.GetService<IWorkflowStorageBridge>().Should().NotBeNull();
@@ -41,13 +41,13 @@ public class ServiceCollectionExtensionsTests
     {
         // Arrange
         var services = new ServiceCollection();
-        
+
         // Act & Assert
         var exception = Assert.Throws<InvalidOperationException>(() =>
             services.AddHangfireWorkflowCore(
                 hangfire => { /* UseMemoryStorage not available in test */ },
                 workflow => { /* no storage bridge configured */ }));
-                
+
         exception.Message.Should().Contain("storage bridge is required");
     }
 
@@ -58,10 +58,10 @@ public class ServiceCollectionExtensionsTests
         var services = new ServiceCollection();
         services.AddLogging(); // Add logging for WorkflowCore
         var hangfireConfigCalled = false;
-        
+
         // Act
         services.AddHangfireWorkflowCore(
-            hangfire => 
+            hangfire =>
             {
                 hangfireConfigCalled = true;
                 hangfire.UseMemoryStorage();
@@ -71,13 +71,13 @@ public class ServiceCollectionExtensionsTests
                 workflow.UseStorageBridge<MockWorkflowStorageBridge>();
                 workflow.UseInstanceProvider<MockWorkflowInstanceProvider>();
             });
-        
+
         // Build service provider to trigger the configuration
         var serviceProvider = services.BuildServiceProvider();
-        
+
         // Trigger Hangfire service resolution to invoke configuration
         var _ = serviceProvider.GetService<IGlobalConfiguration>();
-        
+
         // Assert
         hangfireConfigCalled.Should().BeTrue();
         serviceProvider.GetService<IWorkflowStorageBridge>()
@@ -90,21 +90,21 @@ public class ServiceCollectionExtensionsTests
         // Arrange
         var services = new ServiceCollection();
         services.AddLogging(); // Add logging for WorkflowCore
-        
+
         // Act
         services.AddHangfireWorkflowCore(
             hangfire => hangfire.UseMemoryStorage(),
-            workflow => 
+            workflow =>
             {
                 workflow.UseStorageBridge<MockWorkflowStorageBridge>();
                 workflow.UseInstanceProvider<MockWorkflowInstanceProvider>();
             });
         var serviceProvider = services.BuildServiceProvider();
-        
+
         // Assert - Hangfire services should be registered
         serviceProvider.GetService<IBackgroundJobClient>().Should().NotBeNull();
         serviceProvider.GetService<IRecurringJobManager>().Should().NotBeNull();
-        
+
         // Assert - WorkflowCore services should be registered
         serviceProvider.GetService<IWorkflowHost>().Should().NotBeNull();
         serviceProvider.GetService<IWorkflowRegistry>().Should().NotBeNull();

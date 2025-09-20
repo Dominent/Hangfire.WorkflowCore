@@ -45,7 +45,7 @@ public class AnalyzeVideoStep : StepBody
         data.DurationSeconds = new Random().Next(30, 3600); // 30s - 1hour
 
         Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] Analysis complete - Size: {data.FileSizeBytes / 1024 / 1024}MB, Duration: {data.DurationSeconds}s");
-        
+
         return ExecutionResult.Next();
     }
 }
@@ -69,9 +69,9 @@ public class ConvertVideoStep : StepBody
         Thread.Sleep(Math.Min(conversionTimeMs, 5000)); // Cap at 5 seconds for demo
 
         data.OutputPath = $"/output/{data.VideoId}_{data.Quality}.mp4";
-        
+
         Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] Conversion complete: {data.OutputPath}");
-        
+
         return ExecutionResult.Next();
     }
 }
@@ -95,7 +95,7 @@ public class UploadVideoStep : StepBody
         Thread.Sleep(Math.Min((int)uploadTimeMs, 3000)); // Cap at 3 seconds for demo
 
         Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] Upload complete for video: {data.VideoId}");
-        
+
         return ExecutionResult.Next();
     }
 }
@@ -120,7 +120,7 @@ public class CleanupStep : StepBody
         data.CompletedAt = DateTime.UtcNow;
 
         Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] ✅ Video processing completed: {data.VideoId}");
-        
+
         return ExecutionResult.Next();
     }
 }

@@ -31,10 +31,10 @@ public class WorkflowJobTests
         var data = new TestData { Name = "Test", Value = 42 };
         var jsonData = JsonSerializer.Serialize(data);
         var workflowInstanceId = "workflow-instance-456";
-        
+
         _workflowHost.StartWorkflow(typeof(TestWorkflow).Name, Arg.Any<TestData>())
             .Returns(Task.FromResult(workflowInstanceId));
-        
+
         var workflowInstance = new WorkflowInstance
         {
             Id = workflowInstanceId,
@@ -42,21 +42,21 @@ public class WorkflowJobTests
             CompleteTime = DateTime.UtcNow,
             Data = data
         };
-        
+
         _workflowInstanceProvider.GetWorkflowInstanceAsync(workflowInstanceId)
             .Returns(Task.FromResult<WorkflowInstance?>(workflowInstance));
-        
+
         var workflowJob = new WorkflowJob<TestWorkflow, TestData>(_workflowHost, _storageBridge, _workflowInstanceProvider, _logger);
-        
+
         // Act
         var result = await workflowJob.ExecuteAsync(jobId, jsonData);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.WorkflowInstanceId.Should().Be(workflowInstanceId);
         result.Status.Should().Be(WorkflowStatus.Complete);
         result.Data.Should().BeEquivalentTo(data);
-        
+
         // Verify interactions
         await _workflowHost.Received(1).StartWorkflow(
             typeof(TestWorkflow).Name,
@@ -72,25 +72,25 @@ public class WorkflowJobTests
         var jobId = "hangfire-job-123";
         var jsonData = """{"name": "Test"}""";
         var workflowInstanceId = "workflow-instance-456";
-        
+
         _workflowHost.StartWorkflow(typeof(TestWorkflow).Name, Arg.Any<TestData>())
             .Returns(Task.FromResult(workflowInstanceId));
-        
+
         var workflowInstance = new WorkflowInstance
         {
             Id = workflowInstanceId,
             Status = WorkflowStatus.Terminated,
             CompleteTime = DateTime.UtcNow
         };
-        
+
         _workflowInstanceProvider.GetWorkflowInstanceAsync(workflowInstanceId)
             .Returns(Task.FromResult<WorkflowInstance?>(workflowInstance));
-        
+
         var workflowJob = new WorkflowJob<TestWorkflow, TestData>(_workflowHost, _storageBridge, _workflowInstanceProvider, _logger);
-        
+
         // Act
         var result = await workflowJob.ExecuteAsync(jobId, jsonData);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.WorkflowInstanceId.Should().Be(workflowInstanceId);
@@ -103,17 +103,17 @@ public class WorkflowJobTests
         // Arrange
         var jobId = "hangfire-job-123";
         var invalidJson = "invalid json {";
-        
+
         var workflowJob = new WorkflowJob<TestWorkflow, TestData>(_workflowHost, _storageBridge, _workflowInstanceProvider, _logger);
-        
+
         // Act
         var result = await workflowJob.ExecuteAsync(jobId, invalidJson);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.Status.Should().Be(WorkflowStatus.Terminated);
         result.ErrorMessage.Should().Contain("JSON");
-        
+
         // Should not start workflow with invalid data
         await _workflowHost.DidNotReceive().StartWorkflow(typeof(TestWorkflow).Name, Arg.Any<TestData>());
     }
@@ -126,10 +126,10 @@ public class WorkflowJobTests
         var jsonData = """{"name": "Test"}""";
         var workflowInstanceId = "workflow-instance-456";
         var cancellationToken = new CancellationTokenSource(TimeSpan.FromMilliseconds(10)).Token;
-        
+
         _workflowHost.StartWorkflow(typeof(TestWorkflow).Name, Arg.Any<TestData>())
             .Returns(Task.FromResult(workflowInstanceId));
-        
+
         // Simulate long-running workflow that never completes
         var runningInstance = new WorkflowInstance
         {
@@ -137,15 +137,16 @@ public class WorkflowJobTests
             Status = WorkflowStatus.Runnable,
             CreateTime = DateTime.UtcNow
         };
-        
+
         _workflowInstanceProvider.GetWorkflowInstanceAsync(workflowInstanceId)
             .Returns(Task.FromResult<WorkflowInstance?>(runningInstance));
-        
+
         var workflowJob = new WorkflowJob<TestWorkflow, TestData>(_workflowHost, _storageBridge, _workflowInstanceProvider, _logger);
-        
+
         // Act & Assert
-        await Assert.ThrowsAsync<OperationCanceledException>(
+        var exception = await Assert.ThrowsAnyAsync<OperationCanceledException>(
             () => workflowJob.ExecuteAsync(jobId, jsonData, cancellationToken));
+        Assert.True(exception is OperationCanceledException);
     }
 
     [Fact]
@@ -153,7 +154,7 @@ public class WorkflowJobTests
     {
         // Arrange
         var workflowJob = new WorkflowJob<TestWorkflow, TestData>(_workflowHost, _storageBridge, _workflowInstanceProvider, _logger);
-        
+
         // Act & Assert
         workflowJob.WorkflowInstanceId.Should().BeNull(); // Not set until execution
         workflowJob.JobId.Should().BeNull(); // Not set until execution
@@ -165,7 +166,7 @@ public class TestWorkflow : IWorkflow<TestData>
 {
     public string Id => "TestWorkflow";
     public int Version => 1;
-    
+
     public void Build(IWorkflowBuilder<TestData> builder)
     {
         builder.StartWith(context => ExecutionResult.Next());

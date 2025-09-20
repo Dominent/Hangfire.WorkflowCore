@@ -22,13 +22,13 @@ public static class AspNetCoreServiceCollectionExtensions
     {
         // Register HttpContextAccessor if not already registered
         services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        
+
         // Replace the null provider with ASP.NET Core implementation
         services.AddSingleton<IHttpContextSnapshotProvider, AspNetCoreHttpContextSnapshotProvider>();
-        
+
         // Register HttpContextWorkflowJob as transient (resolved per job execution)
         services.TryAddTransient(typeof(HttpContextWorkflowJob<,>));
-        
+
         return services;
     }
 
@@ -46,10 +46,10 @@ public static class AspNetCoreServiceCollectionExtensions
     {
         // Add the core Hangfire.WorkflowCore services
         services.AddHangfireWorkflowCore(configureHangfire, configureWorkflowCore);
-        
+
         // Add ASP.NET Core specific integrations
         services.AddAspNetCoreIntegration();
-        
+
         return services;
     }
 }

@@ -23,11 +23,11 @@ public class ServiceCollectionExtensionsEnhancedTests
 
         // Assert
         var serviceProvider = services.BuildServiceProvider();
-        
+
         // Should register HttpContextAccessor
         var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
         httpContextAccessor.Should().NotBeNull();
-        
+
         // Should register AspNetCore HttpContext snapshot provider
         var snapshotProvider = serviceProvider.GetService<IHttpContextSnapshotProvider>();
         snapshotProvider.Should().NotBeNull();
@@ -45,11 +45,11 @@ public class ServiceCollectionExtensionsEnhancedTests
 
         // Assert
         var serviceProvider = services.BuildServiceProvider();
-        
+
         // Should be able to resolve HttpContextWorkflowJob types
         // This will fail initially because we haven't implemented the auto-registration yet
         var jobType = typeof(HttpContextWorkflowJob<,>);
-        var registration = services.FirstOrDefault(s => s.ServiceType.IsGenericTypeDefinition && 
+        var registration = services.FirstOrDefault(s => s.ServiceType.IsGenericTypeDefinition &&
                                                        s.ServiceType == jobType);
         registration.Should().NotBeNull("HttpContextWorkflowJob should be registered");
     }
@@ -88,7 +88,7 @@ public class ServiceCollectionExtensionsEnhancedTests
 
         // Assert
         var serviceProvider = services.BuildServiceProvider();
-        
+
         // Should have all the core services
         serviceProvider.GetService<IHttpContextAccessor>().Should().NotBeNull();
         serviceProvider.GetService<IHttpContextSnapshotProvider>().Should().NotBeNull();

@@ -20,20 +20,20 @@ public class IHangfireWorkflowExecutorTests
             Status = WorkflowStatus.Complete, // Using WorkflowCore enum
             CompletedAt = DateTime.UtcNow
         };
-        
+
         executor.WaitForCompletionAsync(instanceId, timeout, CancellationToken.None)
             .Returns(Task.FromResult(expectedResult));
-        
+
         // Act
         var result = await executor.WaitForCompletionAsync(instanceId, timeout, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.WorkflowInstanceId.Should().Be(instanceId);
         result.Status.Should().Be(WorkflowStatus.Complete);
         result.CompletedAt.Should().NotBeNull();
     }
-    
+
     [Fact]
     public async Task Should_Get_Execution_Result()
     {
@@ -46,20 +46,20 @@ public class IHangfireWorkflowExecutorTests
             Status = WorkflowStatus.Complete,
             Data = new { Result = "Success" }
         };
-        
+
         executor.GetExecutionResultAsync(instanceId)
             .Returns(Task.FromResult<WorkflowExecutionResult?>(expectedResult));
-        
+
         // Act
         var result = await executor.GetExecutionResultAsync(instanceId);
-        
+
         // Assert
         result.Should().NotBeNull();
         result!.WorkflowInstanceId.Should().Be(instanceId);
         result.Status.Should().Be(WorkflowStatus.Complete);
         result.Data.Should().NotBeNull();
     }
-    
+
     [Fact]
     public async Task Should_Cancel_Workflow_And_Return_Result()
     {
@@ -72,19 +72,19 @@ public class IHangfireWorkflowExecutorTests
             Status = WorkflowStatus.Terminated, // Using WorkflowCore enum for cancellation
             CompletedAt = DateTime.UtcNow
         };
-        
+
         executor.CancelWorkflowAsync(instanceId)
             .Returns(Task.FromResult(expectedResult));
-        
+
         // Act
         var result = await executor.CancelWorkflowAsync(instanceId);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.WorkflowInstanceId.Should().Be(instanceId);
         result.Status.Should().Be(WorkflowStatus.Terminated);
     }
-    
+
     [Fact]
     public async Task Should_Handle_Timeout_Gracefully()
     {
@@ -92,7 +92,7 @@ public class IHangfireWorkflowExecutorTests
         var executor = Substitute.For<IHangfireWorkflowExecutor>();
         var instanceId = "workflow-instance-123";
         var shortTimeout = TimeSpan.FromMilliseconds(1);
-        
+
         executor.WaitForCompletionAsync(instanceId, shortTimeout, Arg.Any<CancellationToken>())
             .Returns(async (callInfo) =>
             {
@@ -105,10 +105,10 @@ public class IHangfireWorkflowExecutorTests
                     ErrorMessage = "Timeout"
                 };
             });
-        
+
         // Act
         var result = await executor.WaitForCompletionAsync(instanceId, shortTimeout, CancellationToken.None);
-        
+
         // Assert
         result.Should().NotBeNull();
         result.WorkflowInstanceId.Should().Be(instanceId);

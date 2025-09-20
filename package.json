@@ -25,7 +25,12 @@
     "dev:setup": "npm run restore && npm run build:debug",
     "dev:test": "npm run test:all",
     "format": "dotnet format --verify-no-changes",
-    "format:fix": "dotnet format"
+    "format:fix": "dotnet format",
+    "lint": "node scripts/lint.js",
+    "lint:fix": "node scripts/lint.js --fix",
+    "coverage": "node scripts/coverage.js",
+    "coverage:report": "node scripts/coverage.js --report",
+    "coverage:open": "node scripts/coverage.js --open"
   },
   "repository": {
     "type": "git",

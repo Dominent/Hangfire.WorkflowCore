@@ -20,7 +20,7 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
     private readonly IWorkflowStorageBridge _storageBridge;
     private readonly IWorkflowInstanceProvider _workflowInstanceProvider;
     private readonly ILogger<WorkflowJob<TWorkflow, TData>> _logger;
-    
+
     private string? _workflowInstanceId;
     private string? _jobId;
 
@@ -68,8 +68,8 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
     private async Task<WorkflowExecutionResult> ExecuteInternalAsync(string jobId, string data, CancellationToken cancellationToken = default)
     {
         _jobId = jobId;
-        
-        _logger.LogInformation("Starting workflow {WorkflowType} for job {JobId}", 
+
+        _logger.LogInformation("Starting workflow {WorkflowType} for job {JobId}",
             typeof(TWorkflow).Name, jobId);
 
         try
@@ -87,7 +87,7 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
             catch (JsonException ex)
             {
                 _logger.LogError(ex, "Failed to deserialize JSON data for job {JobId}", jobId);
-                
+
                 return new WorkflowExecutionResult
                 {
                     WorkflowInstanceId = string.Empty,
@@ -100,8 +100,8 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
             // Start the workflow using the correct WorkflowCore API
             var workflowInstanceId = await _workflowHost.StartWorkflow(typeof(TWorkflow).Name, workflowData);
             _workflowInstanceId = workflowInstanceId;
-            
-            _logger.LogDebug("Workflow instance {WorkflowInstanceId} started for job {JobId}", 
+
+            _logger.LogDebug("Workflow instance {WorkflowInstanceId} started for job {JobId}",
                 workflowInstanceId, jobId);
 
             // Store the job-to-workflow mapping
@@ -113,7 +113,7 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
             // Store the result
             await _storageBridge.StoreWorkflowResultAsync(workflowInstanceId, result);
 
-            _logger.LogInformation("Workflow {WorkflowInstanceId} completed with status {Status}", 
+            _logger.LogInformation("Workflow {WorkflowInstanceId} completed with status {Status}",
                 workflowInstanceId, result.Status);
 
             return result;
@@ -126,7 +126,7 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error executing workflow for job {JobId}", jobId);
-            
+
             var errorResult = new WorkflowExecutionResult
             {
                 WorkflowInstanceId = _workflowInstanceId ?? string.Empty,
@@ -145,7 +145,7 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
     }
 
     private async Task<WorkflowExecutionResult> WaitForWorkflowCompletionAsync(
-        string workflowInstanceId, 
+        string workflowInstanceId,
         CancellationToken cancellationToken)
     {
         // Poll for workflow completion
@@ -154,7 +154,7 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
             // For testing, we'll simulate getting the workflow instance
             // In a real implementation, we'd use a persistence provider or workflow controller
             var instance = await _workflowInstanceProvider.GetWorkflowInstanceAsync(workflowInstanceId);
-            
+
             if (instance == null)
             {
                 return new WorkflowExecutionResult

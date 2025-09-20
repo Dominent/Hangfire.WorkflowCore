@@ -16,14 +16,14 @@ public interface IHangfireWorkflowExecutor
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The workflow execution result</returns>
     Task<WorkflowExecutionResult> WaitForCompletionAsync(string instanceId, TimeSpan timeout, CancellationToken cancellationToken = default);
-    
+
     /// <summary>
     /// Gets workflow execution result
     /// </summary>
     /// <param name="instanceId">The workflow instance ID</param>
     /// <returns>The execution result or null if not found</returns>
     Task<WorkflowExecutionResult?> GetExecutionResultAsync(string instanceId);
-    
+
     /// <summary>
     /// Cancels a workflow and returns execution result
     /// </summary>

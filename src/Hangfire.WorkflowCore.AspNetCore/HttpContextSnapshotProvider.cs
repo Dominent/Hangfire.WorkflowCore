@@ -56,7 +56,7 @@ public class AspNetCoreHttpContextSnapshotProvider : IHttpContextSnapshotProvide
         if (httpContext.User?.Identity?.IsAuthenticated == true)
         {
             snapshot.UserId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
+
             // Copy important claims
             var importantClaims = new[] { ClaimTypes.Name, ClaimTypes.Email, ClaimTypes.Role, "sub" };
             foreach (var claimType in importantClaims)

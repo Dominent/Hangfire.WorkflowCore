@@ -19,12 +19,12 @@ builder.ConfigureServices((context, services) =>
 {
     // Add logging
     services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(LogLevel.Information));
-    
+
     // Add Hangfire.WorkflowCore with all necessary configurations
     services.AddHangfireWorkflowCore(
         // Configure Hangfire (storage, dashboard, etc.)
         hangfireConfig => hangfireConfig.UseMemoryStorage(),
-        
+
         // Configure WorkflowCore integration components
         workflowOptions =>
         {
