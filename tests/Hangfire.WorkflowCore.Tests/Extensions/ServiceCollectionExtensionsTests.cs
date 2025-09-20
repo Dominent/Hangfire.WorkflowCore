@@ -42,7 +42,7 @@ public class ServiceCollectionExtensionsTests
     {
         // Arrange
         var services = new ServiceCollection();
-        
+
         // Add required logging services
         services.AddLogging();
 
@@ -60,10 +60,10 @@ public class ServiceCollectionExtensionsTests
 
         storageBridge.Should().NotBeNull();
         storageBridge.Should().BeOfType<InMemoryWorkflowStorageBridge>();
-        
+
         instanceProvider.Should().NotBeNull();
         instanceProvider.Should().BeOfType<WorkflowCoreInstanceProvider>();
-        
+
         httpContextProvider.Should().NotBeNull();
         httpContextProvider.Should().BeOfType<NullHttpContextSnapshotProvider>();
     }

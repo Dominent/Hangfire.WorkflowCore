@@ -135,7 +135,7 @@ public class ServiceCollectionExtensionsEnhancedTests
     {
         // Arrange
         var services = new ServiceCollection();
-        
+
         // Add required logging services for dashboard
         services.AddLogging();
 
