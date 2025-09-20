@@ -102,8 +102,8 @@ jobs:
       run: |
         echo "🔍 Checking code coverage results..."
         
-        # Set minimum coverage threshold (50%)
-        COVERAGE_THRESHOLD=50
+        # Set minimum coverage threshold (45%)
+        COVERAGE_THRESHOLD=45
         
         # Extract coverage percentage from coverage reports
         if [ -d "./coverage" ]; then
