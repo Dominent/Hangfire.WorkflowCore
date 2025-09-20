@@ -408,7 +408,21 @@ While the library is storage-agnostic, here are recommended approaches:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **LGPL v3** license to ensure compatibility with Hangfire's licensing requirements - see the [LICENSE](LICENSE) file for details.
+
+### License Compatibility
+
+- **Hangfire.WorkflowCore** - LGPL v3 or later
+- **Hangfire** - LGPL v3 (dependency)
+- **WorkflowCore** - MIT (dependency)
+
+The LGPL v3 license allows you to:
+- ✅ Use the library in both open source and commercial applications
+- ✅ Modify and distribute the library
+- ✅ Link to the library without affecting your application's license
+- ✅ Use the library in closed-source applications
+
+**Note**: If you modify the library itself and distribute your modified version, you must make those modifications available under LGPL v3.
 
 ## Changelog
 

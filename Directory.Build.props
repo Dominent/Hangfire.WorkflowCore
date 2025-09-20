@@ -13,7 +13,7 @@
     <Copyright>Copyright © $([System.DateTime]::Now.Year) Hangfire.WorkflowCore Contributors</Copyright>
     <PackageProjectUrl>https://github.com/yourusername/Hangfire.WorkflowCore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/yourusername/Hangfire.WorkflowCore</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>hangfire;workflow;workflowcore;orchestration;background;jobs</PackageTags>
     

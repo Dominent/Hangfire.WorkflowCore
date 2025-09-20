@@ -20,7 +20,9 @@ console.log(chalk.gray(`Configuration: ${options.configuration}`));
 
 const projects = [
   'src/Hangfire.WorkflowCore.Abstractions/Hangfire.WorkflowCore.Abstractions.csproj',
-  'src/Hangfire.WorkflowCore/Hangfire.WorkflowCore.csproj'
+  'src/Hangfire.WorkflowCore/Hangfire.WorkflowCore.csproj',
+  'src/Hangfire.WorkflowCore.Dashboard/Hangfire.WorkflowCore.Dashboard.csproj',
+  'src/Hangfire.WorkflowCore.AspNetCore/Hangfire.WorkflowCore.AspNetCore.csproj'
 ];
 
 async function runCommand(command, args, description) {
