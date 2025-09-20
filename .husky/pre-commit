@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Run linting
+echo "📝 Checking code formatting..."
+npm run lint
+if [ $? -ne 0 ]; then
+  echo "❌ Linting failed. Please fix the issues and try again."
+  echo "💡 Run 'npm run lint:fix' to auto-fix formatting issues."
+  exit 1
+fi
+
+# Run tests
+echo "🧪 Running unit tests..."
+npm run test:all
+if [ $? -ne 0 ]; then
+  echo "❌ Tests failed. Please fix the failing tests and try again."
+  exit 1
+fi
+
+echo "✅ All pre-commit checks passed!"
