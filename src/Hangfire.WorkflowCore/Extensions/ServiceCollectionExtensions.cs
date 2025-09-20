@@ -1,5 +1,6 @@
 using Hangfire;
 using Hangfire.WorkflowCore.Abstractions;
+using Hangfire.WorkflowCore.Services;
 using Microsoft.Extensions.DependencyInjection;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
@@ -83,6 +84,9 @@ public static class ServiceCollectionExtensions
         }
         
         services.AddSingleton(typeof(IWorkflowInstanceProvider), workflowOptions.CustomInstanceProviderType);
+        
+        // Register default null HttpContext provider (can be overridden by ASP.NET Core package)
+        services.TryAddSingleton<IHttpContextSnapshotProvider, NullHttpContextSnapshotProvider>();
         
         return services;
     }

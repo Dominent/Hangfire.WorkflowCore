@@ -1,7 +1,8 @@
+using VideoProcessing.Core.Models;
 using WorkflowCore.Interface;
 using WorkflowCore.Models;
 
-namespace VideoProcessing;
+namespace VideoProcessing.Core.Workflows;
 
 /// <summary>
 /// A comprehensive video processing workflow that demonstrates the integration

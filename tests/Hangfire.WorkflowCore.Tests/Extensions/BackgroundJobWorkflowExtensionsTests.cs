@@ -28,7 +28,7 @@ public class BackgroundJobWorkflowExtensionsTests : IDisposable
         var data = new TestWorkflowData { Name = "Test", Value = 42 };
         
         // Act
-        var jobId = BackgroundJobWorkflow.Enqueue<TestWorkflow, TestWorkflowData>(data);
+        var jobId = BackgroundJobWorkflow.Instance.Enqueue<TestWorkflow, TestWorkflowData>(data);
         
         // Assert
         jobId.Should().NotBeNullOrEmpty();
@@ -42,7 +42,7 @@ public class BackgroundJobWorkflowExtensionsTests : IDisposable
         var delay = TimeSpan.FromMinutes(5);
         
         // Act
-        var jobId = BackgroundJobWorkflow.ScheduleWorkflow<TestWorkflow, TestWorkflowData>(data, delay);
+        var jobId = BackgroundJobWorkflow.Instance.ScheduleWorkflow<TestWorkflow, TestWorkflowData>(data, delay);
         
         // Assert
         jobId.Should().NotBeNullOrEmpty();
@@ -56,7 +56,7 @@ public class BackgroundJobWorkflowExtensionsTests : IDisposable
         var scheduleTime = DateTimeOffset.Now.AddHours(1);
         
         // Act
-        var jobId = BackgroundJobWorkflow.ScheduleWorkflow<TestWorkflow, TestWorkflowData>(data, scheduleTime);
+        var jobId = BackgroundJobWorkflow.Instance.ScheduleWorkflow<TestWorkflow, TestWorkflowData>(data, scheduleTime);
         
         // Assert
         jobId.Should().NotBeNullOrEmpty();
@@ -68,12 +68,12 @@ public class BackgroundJobWorkflowExtensionsTests : IDisposable
         // Arrange
         // First create a parent job
         var parentData = new TestWorkflowData { Name = "Parent", Value = 1 };
-        var parentJobId = BackgroundJobWorkflow.Enqueue<TestWorkflow, TestWorkflowData>(parentData);
+        var parentJobId = BackgroundJobWorkflow.Instance.Enqueue<TestWorkflow, TestWorkflowData>(parentData);
         
         var data = new TestWorkflowData { Name = "Continuation", Value = 99 };
         
         // Act
-        var jobId = BackgroundJobWorkflow.ContinueWorkflowWith<TestWorkflow, TestWorkflowData>(parentJobId, data);
+        var jobId = BackgroundJobWorkflow.Instance.ContinueWorkflowWith<TestWorkflow, TestWorkflowData>(parentJobId, data);
         
         // Assert
         jobId.Should().NotBeNullOrEmpty();
@@ -88,7 +88,7 @@ public class BackgroundJobWorkflowExtensionsTests : IDisposable
         var cronExpression = "0 2 * * *"; // Daily at 2 AM
         
         // Act & Assert
-        var action = () => RecurringJobWorkflow.AddOrUpdateWorkflow<TestWorkflow, TestWorkflowData>(
+        var action = () => RecurringJobWorkflow.Instance.AddOrUpdateWorkflow<TestWorkflow, TestWorkflowData>(
             recurringJobId, data, cronExpression);
         
         action.Should().NotThrow();
@@ -101,7 +101,7 @@ public class BackgroundJobWorkflowExtensionsTests : IDisposable
         var recurringJobId = "daily-workflow";
         
         // Act & Assert
-        var action = () => RecurringJobWorkflow.RemoveWorkflow(recurringJobId);
+        var action = () => RecurringJobWorkflow.Instance.RemoveWorkflow(recurringJobId);
         
         action.Should().NotThrow();
     }
@@ -113,7 +113,7 @@ public class BackgroundJobWorkflowExtensionsTests : IDisposable
         var recurringJobId = "daily-workflow";
         
         // Act & Assert
-        var action = () => RecurringJobWorkflow.TriggerWorkflow(recurringJobId);
+        var action = () => RecurringJobWorkflow.Instance.TriggerWorkflow(recurringJobId);
         
         action.Should().NotThrow();
     }

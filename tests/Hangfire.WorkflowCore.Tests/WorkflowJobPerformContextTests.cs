@@ -1,5 +1,7 @@
 using FluentAssertions;
+using Hangfire.Common;
 using Hangfire.Server;
+using Hangfire.Storage;
 using Hangfire.WorkflowCore.Abstractions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -22,11 +24,17 @@ public class WorkflowJobPerformContextTests
         _storageBridge = Substitute.For<IWorkflowStorageBridge>();
         _workflowInstanceProvider = Substitute.For<IWorkflowInstanceProvider>();
         _logger = Substitute.For<ILogger<WorkflowJob<TestWorkflow, TestData>>>();
-        _performContext = Substitute.For<PerformContext>();
+        
+        // Create a mock BackgroundJob with proper structure
+        var backgroundJob = new BackgroundJob("test-job-123", Job.FromExpression(() => Console.WriteLine()), DateTime.UtcNow);
+        var cancellationToken = Substitute.For<IJobCancellationToken>();
+        var connection = Substitute.For<IStorageConnection>();
+        var storage = Substitute.For<JobStorage>();
+        _performContext = new PerformContext(storage, connection, backgroundJob, cancellationToken);
     }
 
     [Fact]
-    public void WorkflowJob_Should_Extract_JobId_From_PerformContext()
+    public async Task WorkflowJob_Should_Extract_JobId_From_PerformContext()
     {
         // Arrange
         var expectedJobId = "test-job-123";
@@ -34,8 +42,7 @@ public class WorkflowJobPerformContextTests
         var jsonData = System.Text.Json.JsonSerializer.Serialize(data);
         var workflowInstanceId = "workflow-instance-456";
         
-        // Mock PerformContext to return our test job ID
-        _performContext.BackgroundJob.Id.Returns(expectedJobId);
+        // PerformContext is now a real object with the expected job ID
         
         _workflowHost.StartWorkflow(typeof(TestWorkflow).Name, Arg.Any<TestData>())
             .Returns(Task.FromResult(workflowInstanceId));
@@ -55,14 +62,14 @@ public class WorkflowJobPerformContextTests
             _workflowHost, _storageBridge, _workflowInstanceProvider, _logger);
         
         // Act
-        var result = workflowJob.ExecuteWithContextAsync(_performContext, jsonData);
+        var result = await workflowJob.ExecuteWithContextAsync(_performContext, jsonData);
         
         // Assert
-        // The method should accept PerformContext and extract job ID from it
-        // For now this will fail because we haven't implemented this method yet
         result.Should().NotBeNull();
+        result.Status.Should().Be(WorkflowStatus.Complete);
+        result.WorkflowInstanceId.Should().Be(workflowInstanceId);
         
         // Verify that the storage bridge was called with the correct job ID from context
-        _storageBridge.Received(1).StoreJobWorkflowMappingAsync(expectedJobId, workflowInstanceId);
+        await _storageBridge.Received(1).StoreJobWorkflowMappingAsync(expectedJobId, workflowInstanceId);
     }
 }

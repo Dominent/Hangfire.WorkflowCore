@@ -1,4 +1,4 @@
-namespace VideoProcessing;
+namespace VideoProcessing.Core.Models;
 
 public class VideoData
 {

@@ -43,6 +43,10 @@ async function runCommand(command, args, description) {
 
 async function runTests() {
   try {
+    console.log(chalk.blue('\n📋 Test Projects:'));
+    console.log(chalk.gray('  • Hangfire.WorkflowCore.Tests'));
+    console.log(chalk.gray('  • Hangfire.WorkflowCore.AspNetCore.Tests'));
+
     const testArgs = [
       'test',
       '--configuration', options.configuration,
@@ -65,13 +69,15 @@ async function runTests() {
       testArgs.push('--coverage-output', 'coverage');
     }
 
-    await runCommand('dotnet', testArgs, 'Running tests');
+    await runCommand('dotnet', testArgs, 'Running all test projects');
 
     if (!options.watch) {
       console.log(chalk.green('\n🎉 All tests passed!'));
       
       // Show test summary
       console.log(chalk.blue('\n📊 Test Summary:'));
+      console.log(chalk.gray('  • Core library tests: Hangfire.WorkflowCore.Tests'));
+      console.log(chalk.gray('  • ASP.NET Core integration tests: Hangfire.WorkflowCore.AspNetCore.Tests'));
       console.log(chalk.gray('  Run `npm run test -- --verbosity normal` for detailed output'));
       
       if (options.collectCoverage) {

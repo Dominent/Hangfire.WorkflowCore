@@ -8,31 +8,34 @@ using WorkflowCore.Models;
 namespace Hangfire.WorkflowCore;
 
 /// <summary>
-/// Generic Hangfire job that executes a Workflow Core workflow
+/// Specialized Hangfire job that executes a Workflow Core workflow with HttpContext support
 /// </summary>
-/// <typeparam name="TWorkflow">The workflow type</typeparam>
-/// <typeparam name="TData">The workflow data type</typeparam>
-public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
-    where TWorkflow : IWorkflow<TData>, new()
+/// <typeparam name="TWorkflow">The workflow type that accepts WorkflowDataWithContext</typeparam>
+/// <typeparam name="TData">The original workflow data type</typeparam>
+public class HttpContextWorkflowJob<TWorkflow, TData> : IWorkflowJob
+    where TWorkflow : IWorkflow<WorkflowDataWithContext<TData>>, new()
     where TData : class, new()
 {
     private readonly IWorkflowHost _workflowHost;
     private readonly IWorkflowStorageBridge _storageBridge;
     private readonly IWorkflowInstanceProvider _workflowInstanceProvider;
-    private readonly ILogger<WorkflowJob<TWorkflow, TData>> _logger;
+    private readonly IHttpContextSnapshotProvider _httpContextProvider;
+    private readonly ILogger<HttpContextWorkflowJob<TWorkflow, TData>> _logger;
     
     private string? _workflowInstanceId;
     private string? _jobId;
 
-    public WorkflowJob(
+    public HttpContextWorkflowJob(
         IWorkflowHost workflowHost,
         IWorkflowStorageBridge storageBridge,
         IWorkflowInstanceProvider workflowInstanceProvider,
-        ILogger<WorkflowJob<TWorkflow, TData>> logger)
+        IHttpContextSnapshotProvider httpContextProvider,
+        ILogger<HttpContextWorkflowJob<TWorkflow, TData>> logger)
     {
         _workflowHost = workflowHost ?? throw new ArgumentNullException(nameof(workflowHost));
         _storageBridge = storageBridge ?? throw new ArgumentNullException(nameof(storageBridge));
         _workflowInstanceProvider = workflowInstanceProvider ?? throw new ArgumentNullException(nameof(workflowInstanceProvider));
+        _httpContextProvider = httpContextProvider ?? throw new ArgumentNullException(nameof(httpContextProvider));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -45,31 +48,30 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
     /// <inheritdoc />
     public async Task<WorkflowExecutionResult> ExecuteAsync(string jobId, string data, CancellationToken cancellationToken = default)
     {
-        return await ExecuteInternalAsync(jobId, data, cancellationToken);
+        return await ExecuteWithHttpContextInternalAsync(jobId, data, cancellationToken);
     }
 
     /// <summary>
-    /// Executes the workflow using PerformContext to get the job ID
+    /// Executes the workflow with HttpContext integration
     /// </summary>
     /// <param name="context">The Hangfire perform context</param>
     /// <param name="data">The serialized workflow data</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The workflow execution result</returns>
-    public async Task<WorkflowExecutionResult> ExecuteWithContextAsync(PerformContext? context, string data, CancellationToken cancellationToken = default)
+    public async Task<WorkflowExecutionResult> ExecuteWithHttpContextAsync(PerformContext? context, string data, CancellationToken cancellationToken = default)
     {
         var jobId = context?.BackgroundJob?.Id ?? "unknown";
-        return await ExecuteInternalAsync(jobId, data, cancellationToken);
+        return await ExecuteWithHttpContextInternalAsync(jobId, data, cancellationToken);
     }
 
-
     /// <summary>
-    /// Internal method that performs the actual workflow execution
+    /// Internal method that performs workflow execution with HttpContext support
     /// </summary>
-    private async Task<WorkflowExecutionResult> ExecuteInternalAsync(string jobId, string data, CancellationToken cancellationToken = default)
+    private async Task<WorkflowExecutionResult> ExecuteWithHttpContextInternalAsync(string jobId, string data, CancellationToken cancellationToken = default)
     {
         _jobId = jobId;
         
-        _logger.LogInformation("Starting workflow {WorkflowType} for job {JobId}", 
+        _logger.LogInformation("Starting workflow {WorkflowType} with HttpContext for job {JobId}", 
             typeof(TWorkflow).Name, jobId);
 
         try
@@ -97,11 +99,21 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
                 };
             }
 
-            // Start the workflow using the correct WorkflowCore API
-            var workflowInstanceId = await _workflowHost.StartWorkflow(typeof(TWorkflow).Name, workflowData);
+            // Get HttpContext snapshot
+            var httpContextSnapshot = _httpContextProvider.GetCurrentSnapshot();
+            
+            // Wrap data with HttpContext
+            var dataWithContext = new WorkflowDataWithContext<TData>
+            {
+                Data = workflowData,
+                HttpContext = httpContextSnapshot
+            };
+
+            // Start the workflow with enhanced data
+            var workflowInstanceId = await _workflowHost.StartWorkflow(typeof(TWorkflow).Name, dataWithContext);
             _workflowInstanceId = workflowInstanceId;
             
-            _logger.LogDebug("Workflow instance {WorkflowInstanceId} started for job {JobId}", 
+            _logger.LogDebug("Workflow instance {WorkflowInstanceId} started with HttpContext for job {JobId}", 
                 workflowInstanceId, jobId);
 
             // Store the job-to-workflow mapping
@@ -151,8 +163,6 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
         // Poll for workflow completion
         while (!cancellationToken.IsCancellationRequested)
         {
-            // For testing, we'll simulate getting the workflow instance
-            // In a real implementation, we'd use a persistence provider or workflow controller
             var instance = await _workflowInstanceProvider.GetWorkflowInstanceAsync(workflowInstanceId);
             
             if (instance == null)
@@ -197,5 +207,4 @@ public class WorkflowJob<TWorkflow, TData> : IWorkflowJob
         // If we get here, cancellation was requested
         throw new OperationCanceledException("Workflow execution was cancelled", cancellationToken);
     }
-
 }

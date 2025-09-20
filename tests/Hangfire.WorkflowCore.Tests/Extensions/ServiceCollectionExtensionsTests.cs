@@ -1,9 +1,12 @@
 using FluentAssertions;
 using Hangfire;
+using Hangfire.MemoryStorage;
 using Hangfire.WorkflowCore.Abstractions;
 using Hangfire.WorkflowCore.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using WorkflowCore.Interface;
+using WorkflowCore.Models;
 
 namespace Hangfire.WorkflowCore.Tests.Extensions;
 
@@ -14,6 +17,7 @@ public class ServiceCollectionExtensionsTests
     {
         // Arrange
         var services = new ServiceCollection();
+        services.AddLogging(); // Add logging for WorkflowCore
         
         // Act
         services.AddHangfireWorkflowCore(
@@ -52,6 +56,7 @@ public class ServiceCollectionExtensionsTests
     {
         // Arrange
         var services = new ServiceCollection();
+        services.AddLogging(); // Add logging for WorkflowCore
         var hangfireConfigCalled = false;
         
         // Act
@@ -67,9 +72,14 @@ public class ServiceCollectionExtensionsTests
                 workflow.UseInstanceProvider<MockWorkflowInstanceProvider>();
             });
         
+        // Build service provider to trigger the configuration
+        var serviceProvider = services.BuildServiceProvider();
+        
+        // Trigger Hangfire service resolution to invoke configuration
+        var _ = serviceProvider.GetService<IGlobalConfiguration>();
+        
         // Assert
         hangfireConfigCalled.Should().BeTrue();
-        var serviceProvider = services.BuildServiceProvider();
         serviceProvider.GetService<IWorkflowStorageBridge>()
             .Should().BeOfType<MockWorkflowStorageBridge>();
     }
@@ -79,6 +89,7 @@ public class ServiceCollectionExtensionsTests
     {
         // Arrange
         var services = new ServiceCollection();
+        services.AddLogging(); // Add logging for WorkflowCore
         
         // Act
         services.AddHangfireWorkflowCore(
@@ -100,7 +111,7 @@ public class ServiceCollectionExtensionsTests
     }
 }
 
-// Mock class for testing
+// Mock classes for testing
 public class MockWorkflowStorageBridge : IWorkflowStorageBridge
 {
     public Task StoreJobWorkflowMappingAsync(string jobId, string workflowInstanceId) => Task.CompletedTask;
@@ -111,4 +122,10 @@ public class MockWorkflowStorageBridge : IWorkflowStorageBridge
     public Task<bool> DeleteMappingAsync(string jobId) => Task.FromResult(false);
     public Task<IDictionary<string, string>> GetAllMappingsAsync() => Task.FromResult<IDictionary<string, string>>(new Dictionary<string, string>());
     public Task<int> CleanupOldEntriesAsync(DateTime olderThan) => Task.FromResult(0);
+}
+
+public class MockWorkflowInstanceProvider : IWorkflowInstanceProvider
+{
+    public Task<WorkflowInstance?> GetWorkflowInstanceAsync(string workflowInstanceId) =>
+        Task.FromResult<WorkflowInstance?>(null);
 }
