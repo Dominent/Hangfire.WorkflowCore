@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Hangfire.WorkflowCore\Hangfire.WorkflowCore.csproj" />
     <ProjectReference Include="..\Hangfire.WorkflowCore.Abstractions\Hangfire.WorkflowCore.Abstractions.csproj" />
+    <ProjectReference Include="..\Hangfire.WorkflowCore.Dashboard\Hangfire.WorkflowCore.Dashboard.csproj" />
   </ItemGroup>
 
 </Project>

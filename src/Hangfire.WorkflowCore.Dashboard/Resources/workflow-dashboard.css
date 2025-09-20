@@ -1,0 +1,294 @@
+/* Hangfire Workflow Dashboard Styles */
+
+.workflow-section {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 16px;
+    margin: 16px 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.workflow-section h4 {
+    margin: 0 0 12px 0;
+    color: #495057;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.workflow-section h5 {
+    margin: 12px 0 8px 0;
+    color: #6c757d;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Status indicators */
+.workflow-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.workflow-status.complete {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.workflow-status.running {
+    background: #cce5ff;
+    border: 1px solid #99d6ff;
+}
+
+.workflow-status.suspended {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+}
+
+.workflow-status.failed {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.status-badge {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.workflow-status.complete .status-badge {
+    color: #155724;
+}
+
+.workflow-status.running .status-badge {
+    color: #004085;
+}
+
+.workflow-status.suspended .status-badge {
+    color: #856404;
+}
+
+.workflow-status.failed .status-badge {
+    color: #721c24;
+}
+
+.workflow-id {
+    font-family: monospace;
+    font-size: 12px;
+    color: #6c757d;
+    background: #fff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid #dee2e6;
+}
+
+/* Progress bar */
+.workflow-progress {
+    margin-bottom: 12px;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: #495057;
+}
+
+.progress-percentage {
+    font-weight: 600;
+    color: #007bff;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+    transition: width 0.3s ease;
+}
+
+/* Timing information */
+.workflow-timing {
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+
+.timing-row {
+    display: flex;
+    margin-bottom: 4px;
+}
+
+.timing-label {
+    font-weight: 600;
+    color: #6c757d;
+    min-width: 80px;
+}
+
+.timing-value {
+    color: #495057;
+    font-family: monospace;
+}
+
+/* Steps */
+.workflow-steps {
+    margin-top: 16px;
+}
+
+.steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.workflow-step {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.workflow-step.step-complete {
+    border-left: 4px solid #28a745;
+}
+
+.workflow-step.step-running {
+    border-left: 4px solid #007bff;
+}
+
+.workflow-step.step-suspended {
+    border-left: 4px solid #ffc107;
+}
+
+.workflow-step.step-failed {
+    border-left: 4px solid #dc3545;
+}
+
+.step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.step-name {
+    font-weight: 600;
+    color: #495057;
+    font-size: 14px;
+}
+
+.step-status {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.workflow-step.step-complete .step-status {
+    background: #d4edda;
+    color: #155724;
+}
+
+.workflow-step.step-running .step-status {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.workflow-step.step-suspended .step-status {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.workflow-step.step-failed .step-status {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.step-timing {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 6px;
+}
+
+.step-error {
+    margin-top: 8px;
+    padding: 8px;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+}
+
+.error-label {
+    font-weight: 600;
+    color: #721c24;
+}
+
+.error-text {
+    color: #721c24;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+/* Error and warning states */
+.workflow-error, .workflow-warning {
+    border-left: 4px solid #dc3545;
+}
+
+.workflow-warning {
+    border-left: 4px solid #ffc107;
+    background: #fff3cd;
+}
+
+.error-message, .warning-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+}
+
+.error-icon, .warning-icon {
+    font-size: 16px;
+}
+
+.no-workflow-data {
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+    padding: 16px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .workflow-status {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .progress-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .step-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .step-timing {
+        flex-direction: column;
+        gap: 4px;
+    }
+}

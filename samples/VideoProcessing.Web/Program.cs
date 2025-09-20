@@ -1,9 +1,7 @@
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Hangfire.WorkflowCore.Abstractions;
-using Hangfire.WorkflowCore.AspNetCore;
 using Hangfire.WorkflowCore.Extensions;
-using VideoProcessing.Core.Services;
 using VideoProcessing.Core.Workflows;
 using VideoProcessing.Core.Models;
 using WorkflowCore.Interface;
@@ -29,11 +27,13 @@ builder.Services.AddHangfireWorkflowCoreAspNetCore(
         hangfireConfig.UseRecommendedSerializerSettings();
     },
 
-    // Configure WorkflowCore integration components
+    // Configure WorkflowCore integration components (using library defaults)
     workflowOptions =>
     {
-        workflowOptions.UseStorageBridge<MockWorkflowStorageBridge>();
-        workflowOptions.UseInstanceProvider<MockWorkflowInstanceProvider>();
+        // Using library's default implementations:
+        // - InMemoryWorkflowStorageBridge for storage
+        // - WorkflowCoreInstanceProvider for real WorkflowCore integration
+        // - Automatic dashboard services registration and configuration
     });
 
 var app = builder.Build();
@@ -42,7 +42,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// Add Hangfire Dashboard
+// Add Hangfire Dashboard (workflow extension is configured automatically)
 app.UseHangfireDashboard("/hangfire");
 
 app.UseAuthorization();

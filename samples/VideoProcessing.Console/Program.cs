@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using VideoProcessing.Core.Models;
-using VideoProcessing.Core.Services;
 using VideoProcessing.Core.Workflows;
 using WorkflowCore.Interface;
 
@@ -23,14 +22,10 @@ builder.ConfigureServices((context, services) =>
     // Add Hangfire.WorkflowCore with all necessary configurations
     services.AddHangfireWorkflowCore(
         // Configure Hangfire (storage, dashboard, etc.)
-        hangfireConfig => hangfireConfig.UseMemoryStorage(),
-
-        // Configure WorkflowCore integration components
-        workflowOptions =>
-        {
-            workflowOptions.UseStorageBridge<MockWorkflowStorageBridge>();
-            workflowOptions.UseInstanceProvider<MockWorkflowInstanceProvider>();
-        });
+        hangfireConfig => hangfireConfig.UseMemoryStorage());
+        // WorkflowCore integration uses library defaults:
+        // - InMemoryWorkflowStorageBridge for storage
+        // - WorkflowCoreInstanceProvider for real WorkflowCore integration
 });
 
 var host = builder.Build();

@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoProcessing.Web", "samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangfire.WorkflowCore.AspNetCore", "src\Hangfire.WorkflowCore.AspNetCore\Hangfire.WorkflowCore.AspNetCore.csproj", "{3A1447EB-99D4-4A45-BDC9-BAB5CA3B6ECD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangfire.WorkflowCore.Dashboard", "src\Hangfire.WorkflowCore.Dashboard\Hangfire.WorkflowCore.Dashboard.csproj", "{94761590-D5A7-4F35-90E2-F037E5B892E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangfire.WorkflowCore.Dashboard.Tests", "tests\Hangfire.WorkflowCore.Dashboard.Tests\Hangfire.WorkflowCore.Dashboard.Tests.csproj", "{3DB04A83-CC85-485E-844B-2045D38AA8DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +70,14 @@ Global
 		{3A1447EB-99D4-4A45-BDC9-BAB5CA3B6ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A1447EB-99D4-4A45-BDC9-BAB5CA3B6ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A1447EB-99D4-4A45-BDC9-BAB5CA3B6ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94761590-D5A7-4F35-90E2-F037E5B892E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94761590-D5A7-4F35-90E2-F037E5B892E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94761590-D5A7-4F35-90E2-F037E5B892E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94761590-D5A7-4F35-90E2-F037E5B892E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DB04A83-CC85-485E-844B-2045D38AA8DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DB04A83-CC85-485E-844B-2045D38AA8DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DB04A83-CC85-485E-844B-2045D38AA8DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DB04A83-CC85-485E-844B-2045D38AA8DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AB18F5D4-5C43-49D8-8ECB-390615B96E72} = {154CCD34-5877-4D98-98CD-39EB023581D7}
@@ -76,5 +88,7 @@ Global
 		{ABC22222-2222-2222-2222-222222222222} = {C4E89263-63A7-4552-8DAE-484669F15381}
 		{ABC33333-3333-3333-3333-333333333333} = {C4E89263-63A7-4552-8DAE-484669F15381}
 		{3A1447EB-99D4-4A45-BDC9-BAB5CA3B6ECD} = {154CCD34-5877-4D98-98CD-39EB023581D7}
+		{94761590-D5A7-4F35-90E2-F037E5B892E1} = {154CCD34-5877-4D98-98CD-39EB023581D7}
+		{3DB04A83-CC85-485E-844B-2045D38AA8DF} = {4EFA170F-9280-4243-AB8E-9E6AB72E7ED5}
 	EndGlobalSection
 EndGlobal

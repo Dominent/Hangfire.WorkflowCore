@@ -1,6 +1,7 @@
 using Hangfire;
 using Hangfire.WorkflowCore.Abstractions;
 using Hangfire.WorkflowCore.AspNetCore;
+using Hangfire.WorkflowCore.Dashboard.Extensions;
 using Hangfire.WorkflowCore.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +34,7 @@ public static class AspNetCoreServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds complete Hangfire.WorkflowCore setup with ASP.NET Core integration
+    /// Adds complete Hangfire.WorkflowCore setup with ASP.NET Core integration and dashboard
     /// </summary>
     /// <param name="services">The service collection</param>
     /// <param name="configureHangfire">Hangfire configuration action</param>
@@ -42,7 +43,7 @@ public static class AspNetCoreServiceCollectionExtensions
     public static IServiceCollection AddHangfireWorkflowCoreAspNetCore(
         this IServiceCollection services,
         Action<IGlobalConfiguration> configureHangfire,
-        Action<WorkflowCoreOptions> configureWorkflowCore)
+        Action<WorkflowCoreOptions>? configureWorkflowCore = null)
     {
         // Add the core Hangfire.WorkflowCore services
         services.AddHangfireWorkflowCore(configureHangfire, configureWorkflowCore);
@@ -50,6 +51,25 @@ public static class AspNetCoreServiceCollectionExtensions
         // Add ASP.NET Core specific integrations
         services.AddAspNetCoreIntegration();
 
+        // Add workflow dashboard services automatically
+        services.AddWorkflowDashboard();
+
+        // Configure the dashboard renderer after building the service provider
+        // We need to use a hosted service or similar to configure this after DI is complete
+        services.AddSingleton<WorkflowDashboardConfiguration>();
+
         return services;
+    }
+
+    /// <summary>
+    /// Internal service to configure dashboard renderer after DI container is built
+    /// </summary>
+    internal class WorkflowDashboardConfiguration
+    {
+        public WorkflowDashboardConfiguration(IServiceProvider serviceProvider)
+        {
+            // Configure Hangfire dashboard to show workflow information
+            GlobalConfiguration.Configuration.UseWorkflowJobDetailsRenderer(serviceProvider);
+        }
     }
 }

@@ -6,7 +6,9 @@ using Hangfire.WorkflowCore.AspNetCore;
 using Hangfire.WorkflowCore.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using WorkflowCore.Models;
+using Hangfire.WorkflowCore.Dashboard.Abstractions;
 
 namespace Hangfire.WorkflowCore.AspNetCore.Tests.Extensions;
 
@@ -94,6 +96,67 @@ public class ServiceCollectionExtensionsEnhancedTests
         serviceProvider.GetService<IHttpContextSnapshotProvider>().Should().NotBeNull();
         serviceProvider.GetService<IWorkflowStorageBridge>().Should().NotBeNull();
         serviceProvider.GetService<IWorkflowInstanceProvider>().Should().NotBeNull();
+    }
+
+    [Fact]
+    public void AddHangfireWorkflowCoreAspNetCore_Should_Automatically_Configure_Dashboard_Renderer()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        
+        // Add required logging services for dashboard
+        services.AddLogging();
+
+        // Act - This should automatically configure the dashboard renderer
+        services.AddHangfireWorkflowCoreAspNetCore(
+            hangfireConfig => hangfireConfig.UseMemoryStorage(),
+            workflowOptions =>
+            {
+                workflowOptions.UseStorageBridge<MockStorageBridge>();
+                workflowOptions.UseInstanceProvider<MockInstanceProvider>();
+            });
+
+        // Assert
+        var serviceProvider = services.BuildServiceProvider();
+
+        // Should have dashboard services registered
+        serviceProvider.GetService<IWorkflowDashboardService>().Should().NotBeNull();
+        serviceProvider.GetService<IWorkflowDataProvider>().Should().NotBeNull();
+        serviceProvider.GetService<IWorkflowStatusCalculator>().Should().NotBeNull();
+        serviceProvider.GetService<IWorkflowRenderer>().Should().NotBeNull();
+
+        // This test will pass once we implement the automatic dashboard configuration
+        // The implementation should call AddWorkflowDashboard() internally
+        // and configure GlobalConfiguration.Configuration.UseWorkflowJobDetailsRenderer()
+    }
+
+    [Fact]
+    public void AddHangfireWorkflowCoreAspNetCore_Should_Configure_Dashboard_When_ServiceProvider_Available()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        
+        // Act
+        services.AddHangfireWorkflowCoreAspNetCore(
+            hangfireConfig => hangfireConfig.UseMemoryStorage(),
+            workflowOptions =>
+            {
+                workflowOptions.UseStorageBridge<MockStorageBridge>();
+                workflowOptions.UseInstanceProvider<MockInstanceProvider>();
+            });
+
+        var serviceProvider = services.BuildServiceProvider();
+
+        // Assert - The dashboard renderer should be automatically configured
+        // This means GlobalConfiguration.Configuration.UseWorkflowJobDetailsRenderer(serviceProvider)
+        // should have been called internally
+        
+        // We can verify this by checking that the dashboard services are available
+        var dashboardService = serviceProvider.GetService<IWorkflowDashboardService>();
+        dashboardService.Should().NotBeNull("Dashboard service should be registered");
+        
+        // Note: Testing the actual GlobalConfiguration is complex in unit tests,
+        // but we can test that all required services are registered correctly
     }
 }
 

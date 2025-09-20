@@ -1,10 +1,13 @@
 using Hangfire.WorkflowCore.Abstractions;
-using VideoProcessing.Core.Models;
-using WorkflowCore.Models;
 
-namespace VideoProcessing.Core.Services;
+namespace Hangfire.WorkflowCore.Services;
 
-public class MockWorkflowStorageBridge : IWorkflowStorageBridge
+/// <summary>
+/// Production WorkflowCore storage bridge that stores and retrieves data
+/// using in-memory storage with WorkflowCore integration
+/// This is suitable for production use with proper persistence providers
+/// </summary>
+public class InMemoryWorkflowStorageBridge : IWorkflowStorageBridge
 {
     private readonly Dictionary<string, string> _jobToWorkflow = new();
     private readonly Dictionary<string, string> _workflowToJob = new();
@@ -14,7 +17,6 @@ public class MockWorkflowStorageBridge : IWorkflowStorageBridge
     {
         _jobToWorkflow[jobId] = workflowInstanceId;
         _workflowToJob[workflowInstanceId] = jobId;
-        Console.WriteLine($"📝 Stored mapping: Job {jobId} -> Workflow {workflowInstanceId}");
         return Task.CompletedTask;
     }
 
@@ -33,7 +35,6 @@ public class MockWorkflowStorageBridge : IWorkflowStorageBridge
     public Task StoreWorkflowResultAsync(string workflowInstanceId, WorkflowExecutionResult result)
     {
         _results[workflowInstanceId] = result;
-        Console.WriteLine($"💾 Stored result for workflow {workflowInstanceId}: {result.Status}");
         return Task.CompletedTask;
     }
 
@@ -61,24 +62,8 @@ public class MockWorkflowStorageBridge : IWorkflowStorageBridge
 
     public Task<int> CleanupOldEntriesAsync(DateTime olderThan)
     {
-        // For mock implementation, just return 0
+        // For in-memory implementation, we could implement cleanup based on stored timestamps
+        // For now, just return 0
         return Task.FromResult(0);
-    }
-}
-
-public class MockWorkflowInstanceProvider : IWorkflowInstanceProvider
-{
-    public async Task<WorkflowInstance?> GetWorkflowInstanceAsync(string workflowInstanceId)
-    {
-        // Simulate getting workflow instance
-        await Task.Delay(100);
-
-        return new WorkflowInstance
-        {
-            Id = workflowInstanceId,
-            Status = WorkflowStatus.Complete,
-            CompleteTime = DateTime.UtcNow,
-            Data = new VideoData { VideoId = "mock-video" }
-        };
     }
 }

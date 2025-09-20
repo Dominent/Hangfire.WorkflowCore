@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <PackageId>Hangfire.WorkflowCore.Dashboard</PackageId>
+    <Description>Dashboard extensions for Hangfire.WorkflowCore with rich workflow visualization and monitoring</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire.Core" Version="$(HangfireVersion)" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="$(HangfireVersion)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsVersion)" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Hangfire.WorkflowCore.Abstractions\Hangfire.WorkflowCore.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\**\*" />
+  </ItemGroup>
+
+</Project>

@@ -10,6 +10,7 @@
     <ProjectReference Include="../../src/Hangfire.WorkflowCore/Hangfire.WorkflowCore.csproj" />
     <ProjectReference Include="../../src/Hangfire.WorkflowCore.Abstractions/Hangfire.WorkflowCore.Abstractions.csproj" />
     <ProjectReference Include="../../src/Hangfire.WorkflowCore.AspNetCore/Hangfire.WorkflowCore.AspNetCore.csproj" />
+    <ProjectReference Include="../../src/Hangfire.WorkflowCore.Dashboard/Hangfire.WorkflowCore.Dashboard.csproj" />
   </ItemGroup>
 
   <ItemGroup>

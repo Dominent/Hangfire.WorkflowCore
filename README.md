@@ -10,14 +10,15 @@ A powerful integration library that combines [Hangfire](https://www.hangfire.io/
 
 - 🚀 **Seamless Integration** - Bridge Hangfire's job scheduling with WorkflowCore's workflow orchestration
 - 🌐 **HttpContext Integration** - Access HTTP request context in background workflows with full serialization support
+- 📊 **Automatic Dashboard** - Real-time workflow monitoring with automatic Hangfire dashboard integration
 - 📅 **Flexible Scheduling** - Immediate, delayed, recurring, and continuation workflows
 - 🔄 **Workflow Orchestration** - Complex multi-step workflows with conditional logic and parallel execution
 - 🛡️ **Reliable Execution** - Built on Hangfire's proven reliability and persistence
 - 🏗️ **Clean Architecture** - Well-defined abstractions and interfaces for extensibility
-- 📊 **Production Ready** - Comprehensive error handling, logging, and monitoring support
-- ⚡ **Simplified Setup** - One-line configuration with full Hangfire and WorkflowCore control
+- 📈 **Production Ready** - Comprehensive error handling, logging, and monitoring support
+- ⚡ **Simplified Setup** - One-line configuration with automatic dashboard and WorkflowCore integration
 - 🎯 **Clean API** - Singleton pattern with intuitive extension methods
-- 🧪 **Test-Driven** - Comprehensive test coverage (52+ tests) following TDD principles
+- 🧪 **Test-Driven** - Comprehensive test coverage (104+ tests) following TDD principles
 
 ## Quick Start
 
@@ -27,8 +28,11 @@ A powerful integration library that combines [Hangfire](https://www.hangfire.io/
 # Install the core package
 dotnet add package Hangfire.WorkflowCore
 
-# Install ASP.NET Core integration (for HttpContext workflows)
+# Install ASP.NET Core integration (for HttpContext workflows + automatic dashboard)
 dotnet add package Hangfire.WorkflowCore.AspNetCore
+
+# Install dashboard (for standalone dashboard integration)
+dotnet add package Hangfire.WorkflowCore.Dashboard
 
 # Install abstractions (if building custom integrations)
 dotnet add package Hangfire.WorkflowCore.Abstractions
@@ -42,25 +46,27 @@ dotnet add package Hangfire.WorkflowCore.Abstractions
 // Basic setup (Console/Worker applications)
 services.AddHangfireWorkflowCore(
     // Configure Hangfire (storage, dashboard, etc.)
-    hangfire => hangfire.UseMemoryStorage(),
-    
-    // Configure WorkflowCore integration components  
-    workflow =>
-    {
-        workflow.UseStorageBridge<YourStorageBridge>();
-        workflow.UseInstanceProvider<YourInstanceProvider>();
-    });
+    hangfire => hangfire.UseMemoryStorage());
+    // WorkflowCore integration uses sensible defaults:
+    // - InMemoryWorkflowStorageBridge for storage
+    // - WorkflowCoreInstanceProvider for real WorkflowCore integration
 
-// ASP.NET Core setup with HttpContext integration (Web applications)
+// ASP.NET Core setup with HttpContext integration + automatic dashboard (Web applications)
 services.AddHangfireWorkflowCoreAspNetCore(
     // Configure Hangfire
-    hangfire => hangfire.UseMemoryStorage(),
+    hangfire => hangfire.UseMemoryStorage());
+    // Includes everything above PLUS:
+    // - HttpContext capture and serialization
+    // - Automatic dashboard services registration
+    // - Automatic dashboard renderer configuration
     
-    // Configure WorkflowCore integration components
+// Optional: Custom implementations
+services.AddHangfireWorkflowCoreAspNetCore(
+    hangfire => hangfire.UseSqlServerStorage("connection-string"),
     workflow =>
     {
-        workflow.UseStorageBridge<YourStorageBridge>();
-        workflow.UseInstanceProvider<YourInstanceProvider>();
+        workflow.UseStorageBridge<CustomStorageBridge>();
+        workflow.UseInstanceProvider<CustomInstanceProvider>();
     });
 ```
 
@@ -114,6 +120,52 @@ RecurringJobWorkflow.Instance.AddOrUpdateWithHttpContext<HttpContextVideoWorkflo
     "daily-processing-with-context", videoData, "0 2 * * *");
 ```
 
+## Workflow Dashboard Integration
+
+### Automatic Dashboard Setup (ASP.NET Core)
+
+When using `AddHangfireWorkflowCoreAspNetCore()`, the library automatically configures the Hangfire dashboard to show detailed workflow information for each job:
+
+```csharp
+// Single line setup - dashboard integration is automatic!
+services.AddHangfireWorkflowCoreAspNetCore(
+    hangfire => hangfire.UseMemoryStorage());
+    
+// Configure Hangfire dashboard (workflow renderer is automatically enabled)
+app.UseHangfireDashboard("/hangfire");
+```
+
+### Dashboard Features
+
+The integrated dashboard displays:
+
+- **Real-time Workflow Status** - Running, Complete, Failed, Suspended
+- **Step-by-Step Progress** - Each workflow step with timing and status
+- **Execution Timing** - Start time, end time, and duration for each step
+- **Progress Indicators** - Visual progress bars and completion percentages
+- **Error Details** - Detailed error messages and stack traces when steps fail
+- **Workflow Metadata** - Workflow ID, job ID, and execution context
+
+### Manual Dashboard Setup (Console Applications)
+
+For non-ASP.NET Core applications, you can manually add dashboard support:
+
+```csharp
+// Add dashboard services
+services.AddWorkflowDashboard();
+
+// Configure the dashboard renderer
+GlobalConfiguration.Configuration.UseWorkflowJobDetailsRenderer(serviceProvider);
+```
+
+### Real WorkflowCore Integration
+
+The dashboard shows **real workflow execution data** from WorkflowCore, including:
+
+- Actual step names from your workflow definitions (`AnalyzeVideoStep`, `ConvertVideoStep`, etc.)
+- Real execution timing and status from WorkflowCore's persistence layer
+- Live workflow instance data with proper state management
+
 ## Architecture
 
 ### Core Components
@@ -123,8 +175,16 @@ RecurringJobWorkflow.Instance.AddOrUpdateWithHttpContext<HttpContextVideoWorkflo
 - **BackgroundJobWorkflow** - Singleton with methods for scheduling workflow jobs
 - **RecurringJobWorkflow** - Singleton with methods for recurring workflow jobs
 - **IWorkflowStorageBridge** - Abstraction for storing job-workflow mappings and results
-- **IWorkflowInstanceProvider** - Abstraction for accessing workflow instances
+- **IWorkflowInstanceProvider** - Abstraction for accessing workflow instances (real WorkflowCore integration)
 - **IHttpContextSnapshotProvider** - Abstraction for capturing and serializing HttpContext data
+
+### Dashboard Components
+
+- **IWorkflowDashboardService** - Main service for rendering workflow information in Hangfire dashboard
+- **IWorkflowDataProvider** - Retrieves workflow execution data from WorkflowCore persistence layer
+- **IWorkflowStatusCalculator** - Calculates workflow progress, timing, and completion percentages
+- **IWorkflowRenderer** - Renders workflow information as HTML for dashboard display
+- **WorkflowJobDetailsExtension** - Hangfire extension that integrates workflow info into job details pages
 
 ### Data Flow
 
@@ -295,9 +355,10 @@ Console application demonstrating basic workflow capabilities:
 - Basic WorkflowJob integration
 
 ### VideoProcessing.Web
-ASP.NET Core web application showcasing HttpContext integration:
+ASP.NET Core web application showcasing HttpContext integration and automatic dashboard:
 - **Swagger UI** at `/swagger` - Interactive API documentation
-- **Hangfire Dashboard** at `/hangfire` - Job monitoring and management
+- **Hangfire Dashboard** at `/hangfire` - Job monitoring with automatic workflow information display
+- **Workflow Dashboard** - Real-time workflow step monitoring, progress tracking, and execution details
 - **API Endpoints**:
   - `POST /api/videos/process` - Basic workflow execution
   - `POST /api/videos/process-with-context` - HttpContext-aware workflow
@@ -350,6 +411,16 @@ While the library is storage-agnostic, here are recommended approaches:
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Changelog
+
+### v3.0.0 (Current)
+- **🔥 Automatic Dashboard Integration** - Real-time workflow monitoring automatically configured with `AddHangfireWorkflowCoreAspNetCore()`
+- **📊 Real WorkflowCore Integration** - Dashboard shows actual workflow execution data with real step names and timing
+- **⚡ One-Line Setup** - Simplified configuration with automatic dashboard renderer registration
+- **🧪 Enhanced Testing** - 104+ tests including TDD implementation of dashboard features
+- **🏗️ New Dashboard Project**: `Hangfire.WorkflowCore.Dashboard` - Complete workflow visualization system
+- **🚀 Production Defaults** - Library provides `WorkflowCoreInstanceProvider` and `InMemoryWorkflowStorageBridge` out-of-the-box
+- **📈 Step-by-Step Monitoring** - Detailed progress tracking, timing, and status for each workflow step
+- **Breaking Changes** - Enhanced `AddHangfireWorkflowCoreAspNetCore()` now includes automatic dashboard configuration
 
 ### v2.0.0
 - **HttpContext Integration** - Complete ASP.NET Core integration with HttpContext capture and serialization
