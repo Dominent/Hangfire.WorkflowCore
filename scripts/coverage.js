@@ -38,8 +38,28 @@ coverageProcess.on('close', (code) => {
 
   console.log(chalk.green('✅ Coverage analysis completed!'));
 
-  if (options.report || options.open) {
-    console.log(chalk.blue('📈 Generating HTML coverage report...'));
+  // Always generate a merged coverage report for CI
+  console.log(chalk.blue('📈 Generating merged coverage report...'));
+  
+  const mergeProcess = spawn('reportgenerator', [
+    '-reports:./coverage/**/coverage.cobertura.xml',
+    '-targetdir:./coverage/merged',
+    '-reporttypes:Cobertura',
+    '-assemblyfilters:-*.Tests*'
+  ], {
+    stdio: 'inherit',
+    shell: true
+  });
+
+  mergeProcess.on('close', (mergeCode) => {
+    if (mergeCode === 0) {
+      console.log(chalk.green('✅ Merged coverage report generated!'));
+    } else {
+      console.log(chalk.yellow('⚠️  Could not generate merged coverage report (reportgenerator not available)'));
+    }
+
+    if (options.report || options.open) {
+      console.log(chalk.blue('📈 Generating HTML coverage report...'));
     
     const reportProcess = spawn('reportgenerator', [
       '-reports:./coverage/**/coverage.cobertura.xml',
@@ -76,7 +96,8 @@ coverageProcess.on('close', (code) => {
       console.log(chalk.yellow('Make sure reportgenerator is installed: dotnet tool install -g dotnet-reportgenerator-globaltool'));
       process.exit(1);
     });
-  }
+    }
+  });
 });
 
 coverageProcess.on('error', (err) => {

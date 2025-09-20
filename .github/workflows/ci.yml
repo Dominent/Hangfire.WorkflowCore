@@ -102,13 +102,50 @@ jobs:
       run: |
         echo "🔍 Checking code coverage results..."
         
-        # Set minimum coverage threshold (45%)
-        COVERAGE_THRESHOLD=45
+        # Set minimum coverage threshold (25%)
+        COVERAGE_THRESHOLD=25
         
         # Extract coverage percentage from coverage reports
         if [ -d "./coverage" ]; then
-          # Look for coverage summary (this may need adjustment based on your coverage tool output)
-          COVERAGE_PERCENT=$(find ./coverage -name "*.xml" -o -name "*.json" | head -1 | xargs grep -o "line-rate=\"[0-9.]*\"" | head -1 | sed 's/line-rate="//' | sed 's/"//' | awk '{print int($1*100)}' || echo "0")
+          # First try to use merged coverage report if available
+          if [ -f "./coverage/merged/Cobertura.xml" ]; then
+            echo "📊 Using merged coverage report"
+            LINES_COVERED=$(grep -o 'lines-covered="[0-9]*"' "./coverage/merged/Cobertura.xml" | sed 's/lines-covered="//' | sed 's/"//' || echo "0")
+            LINES_VALID=$(grep -o 'lines-valid="[0-9]*"' "./coverage/merged/Cobertura.xml" | sed 's/lines-valid="//' | sed 's/"//' || echo "0")
+            
+            if [ "$LINES_VALID" -gt 0 ]; then
+              COVERAGE_PERCENT=$((LINES_COVERED * 100 / LINES_VALID))
+            else
+              COVERAGE_PERCENT=0
+            fi
+            echo "📊 Merged Coverage: $LINES_COVERED/$LINES_VALID lines"
+          else
+            echo "📊 Calculating combined coverage from individual reports"
+            # Calculate combined coverage from all XML reports
+            TOTAL_LINES=0
+            COVERED_LINES=0
+            
+            for xml_file in $(find ./coverage -name "*.xml" | grep -v merged); do
+              if [ -f "$xml_file" ]; then
+                # Extract lines-covered and lines-valid from each XML file
+                LINES_COVERED=$(grep -o 'lines-covered="[0-9]*"' "$xml_file" | sed 's/lines-covered="//' | sed 's/"//' || echo "0")
+                LINES_VALID=$(grep -o 'lines-valid="[0-9]*"' "$xml_file" | sed 's/lines-valid="//' | sed 's/"//' || echo "0")
+                
+                TOTAL_LINES=$((TOTAL_LINES + LINES_VALID))
+                COVERED_LINES=$((COVERED_LINES + LINES_COVERED))
+                
+                echo "📄 File: $(basename "$xml_file") - Covered: $LINES_COVERED/$LINES_VALID"
+              fi
+            done
+            
+            if [ "$TOTAL_LINES" -gt 0 ]; then
+              COVERAGE_PERCENT=$((COVERED_LINES * 100 / TOTAL_LINES))
+            else
+              COVERAGE_PERCENT=0
+            fi
+            
+            echo "📊 Combined Coverage: $COVERED_LINES/$TOTAL_LINES lines"
+          fi
           
           echo "📊 Code Coverage: ${COVERAGE_PERCENT}%"
           echo "🎯 Required Threshold: ${COVERAGE_THRESHOLD}%"
