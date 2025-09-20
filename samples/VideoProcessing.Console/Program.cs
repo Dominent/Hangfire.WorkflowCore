@@ -23,9 +23,9 @@ builder.ConfigureServices((context, services) =>
     services.AddHangfireWorkflowCore(
         // Configure Hangfire (storage, dashboard, etc.)
         hangfireConfig => hangfireConfig.UseMemoryStorage());
-        // WorkflowCore integration uses library defaults:
-        // - InMemoryWorkflowStorageBridge for storage
-        // - WorkflowCoreInstanceProvider for real WorkflowCore integration
+    // WorkflowCore integration uses library defaults:
+    // - InMemoryWorkflowStorageBridge for storage
+    // - WorkflowCoreInstanceProvider for real WorkflowCore integration
 });
 
 var host = builder.Build();

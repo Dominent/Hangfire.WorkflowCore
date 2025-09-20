@@ -1,0 +1,50 @@
+title: "Hangfire.WorkflowCore Documentation"
+description: "A powerful integration library combining Hangfire's job scheduling with WorkflowCore's workflow orchestration"
+url: "https://dominent.github.io"
+baseurl: "/Hangfire.WorkflowCore"
+
+# Theme
+theme: minima
+markdown: kramdown
+highlighter: rouge
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Navigation
+header_pages:
+  - getting-started.md
+  - complete-guide.md
+  - examples.md
+  - api-reference.md
+  - dashboard.md
+  - aspnetcore-integration.md
+  - configuration.md
+  - migration-guide.md
+  - faq.md
+  - changelog.md
+
+# Social
+github_username: Dominent
+repository: Hangfire.WorkflowCore
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Exclude files
+exclude:
+  - .gitignore
+  - README.md
+
+# SEO
+lang: en
+author: "Hangfire.WorkflowCore Contributors"
+
+# Footer
+footer_content: "Copyright © 2025 Hangfire.WorkflowCore Contributors. Licensed under LGPL v3."

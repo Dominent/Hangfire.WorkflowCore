@@ -103,7 +103,7 @@ public class ServiceCollectionExtensionsEnhancedTests
     {
         // Arrange
         var services = new ServiceCollection();
-        
+
         // Add required logging services for dashboard
         services.AddLogging();
 
@@ -135,7 +135,7 @@ public class ServiceCollectionExtensionsEnhancedTests
     {
         // Arrange
         var services = new ServiceCollection();
-        
+
         // Act
         services.AddHangfireWorkflowCoreAspNetCore(
             hangfireConfig => hangfireConfig.UseMemoryStorage(),
@@ -150,11 +150,11 @@ public class ServiceCollectionExtensionsEnhancedTests
         // Assert - The dashboard renderer should be automatically configured
         // This means GlobalConfiguration.Configuration.UseWorkflowJobDetailsRenderer(serviceProvider)
         // should have been called internally
-        
+
         // We can verify this by checking that the dashboard services are available
         var dashboardService = serviceProvider.GetService<IWorkflowDashboardService>();
         dashboardService.Should().NotBeNull("Dashboard service should be registered");
-        
+
         // Note: Testing the actual GlobalConfiguration is complex in unit tests,
         // but we can test that all required services are registered correctly
     }
