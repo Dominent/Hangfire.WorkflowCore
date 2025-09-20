@@ -3,6 +3,7 @@ using Hangfire;
 using Hangfire.MemoryStorage;
 using Hangfire.WorkflowCore.Abstractions;
 using Hangfire.WorkflowCore.Extensions;
+using Hangfire.WorkflowCore.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WorkflowCore.Interface;
@@ -37,18 +38,34 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact]
-    public void AddHangfireWorkflowCore_Should_Throw_When_StorageBridge_Not_Configured()
+    public void AddHangfireWorkflowCore_Should_Use_Default_Implementations_When_Not_Configured()
     {
         // Arrange
         var services = new ServiceCollection();
+        
+        // Add required logging services
+        services.AddLogging();
 
-        // Act & Assert
-        var exception = Assert.Throws<InvalidOperationException>(() =>
-            services.AddHangfireWorkflowCore(
-                hangfire => { /* UseMemoryStorage not available in test */ },
-                workflow => { /* no storage bridge configured */ }));
+        // Act
+        services.AddHangfireWorkflowCore(
+            hangfire => { /* UseMemoryStorage not available in test */ },
+            workflow => { /* no custom configuration */ });
 
-        exception.Message.Should().Contain("storage bridge is required");
+        var serviceProvider = services.BuildServiceProvider();
+
+        // Assert - Should use default implementations
+        var storageBridge = serviceProvider.GetService<IWorkflowStorageBridge>();
+        var instanceProvider = serviceProvider.GetService<IWorkflowInstanceProvider>();
+        var httpContextProvider = serviceProvider.GetService<IHttpContextSnapshotProvider>();
+
+        storageBridge.Should().NotBeNull();
+        storageBridge.Should().BeOfType<InMemoryWorkflowStorageBridge>();
+        
+        instanceProvider.Should().NotBeNull();
+        instanceProvider.Should().BeOfType<WorkflowCoreInstanceProvider>();
+        
+        httpContextProvider.Should().NotBeNull();
+        httpContextProvider.Should().BeOfType<NullHttpContextSnapshotProvider>();
     }
 
     [Fact]
