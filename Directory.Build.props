@@ -11,14 +11,15 @@
     <Authors>Hangfire.WorkflowCore Contributors</Authors>
     <Company>Hangfire.WorkflowCore</Company>
     <Copyright>Copyright © $([System.DateTime]::Now.Year) Hangfire.WorkflowCore Contributors</Copyright>
-    <PackageProjectUrl>https://github.com/yourusername/Hangfire.WorkflowCore</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/yourusername/Hangfire.WorkflowCore</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Dominent/Hangfire.WorkflowCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Dominent/Hangfire.WorkflowCore</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>hangfire;workflow;workflowcore;orchestration;background;jobs</PackageTags>
     
     <!-- Versioning -->
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     

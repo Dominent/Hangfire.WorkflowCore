@@ -2,9 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
-    <PackageId>Hangfire.WorkflowCore.Dashboard</PackageId>
+    <PackageId>WorkflowCoreHangfire.Dashboard</PackageId>
     <Description>Dashboard extensions for Hangfire.WorkflowCore with rich workflow visualization and monitoring</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Hangfire.Core" Version="$(HangfireVersion)" />

@@ -3,6 +3,20 @@
 
 echo "🔍 Running pre-commit checks..."
 
+# Bump version (minor) automatically
+echo "🔢 Auto-bumping version..."
+CURRENT_VERSION=$(grep -o '<Version>[^<]*' Directory.Build.props | sed 's/<Version>//')
+echo "Current version: $CURRENT_VERSION"
+
+npm run version:bump -- --type minor
+if [ $? -eq 0 ]; then
+  NEW_VERSION=$(grep -o '<Version>[^<]*' Directory.Build.props | sed 's/<Version>//')
+  echo "✅ Version bumped: $CURRENT_VERSION → $NEW_VERSION"
+  git add Directory.Build.props
+else
+  echo "⚠️  Version bump failed, continuing with current version"
+fi
+
 # Run linting
 echo "📝 Checking code formatting..."
 npm run lint

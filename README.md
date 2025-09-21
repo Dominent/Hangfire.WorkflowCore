@@ -1,7 +1,7 @@
 # Hangfire.WorkflowCore
 
-[![NuGet](https://img.shields.io/nuget/v/Hangfire.WorkflowCore.svg)](https://www.nuget.org/packages/Hangfire.WorkflowCore)
-[![Build](https://img.shields.io/github/workflow/status/Dominent/Hangfire.WorkflowCore/Build)](https://github.com/Dominent/Hangfire.WorkflowCore/actions)
+[![NuGet](https://img.shields.io/nuget/v/WorkflowCoreHangfire.svg)](https://www.nuget.org/packages/WorkflowCoreHangfire)
+[![Build](https://img.shields.io/github/actions/workflow/status/Dominent/Hangfire.WorkflowCore/ci.yml?branch=main)](https://github.com/Dominent/Hangfire.WorkflowCore/actions)
 [![License](https://img.shields.io/github/license/Dominent/Hangfire.WorkflowCore)](LICENSE)
 [![Documentation](https://img.shields.io/badge/docs-github%20pages-blue)](https://dominent.github.io/Hangfire.WorkflowCore/)
 
@@ -31,7 +31,7 @@ A powerful integration library that combines [Hangfire](https://www.hangfire.io/
 
 ```bash
 # Install for ASP.NET Core (recommended)
-dotnet add package Hangfire.WorkflowCore.AspNetCore
+dotnet add package WorkflowCoreHangfire.AspNetCore
 ```
 
 ```csharp
@@ -50,10 +50,10 @@ var jobId = BackgroundJobWorkflow.Instance
 
 | Package | Description | NuGet |
 |---------|-------------|-------|
-| **Hangfire.WorkflowCore.AspNetCore** | ASP.NET Core integration with HttpContext support | [![NuGet](https://img.shields.io/nuget/v/Hangfire.WorkflowCore.AspNetCore.svg)](https://www.nuget.org/packages/Hangfire.WorkflowCore.AspNetCore) |
-| **Hangfire.WorkflowCore** | Core library for console/worker applications | [![NuGet](https://img.shields.io/nuget/v/Hangfire.WorkflowCore.svg)](https://www.nuget.org/packages/Hangfire.WorkflowCore) |
-| **Hangfire.WorkflowCore.Dashboard** | Standalone dashboard integration | [![NuGet](https://img.shields.io/nuget/v/Hangfire.WorkflowCore.Dashboard.svg)](https://www.nuget.org/packages/Hangfire.WorkflowCore.Dashboard) |
-| **Hangfire.WorkflowCore.Abstractions** | Interfaces and abstractions | [![NuGet](https://img.shields.io/nuget/v/Hangfire.WorkflowCore.Abstractions.svg)](https://www.nuget.org/packages/Hangfire.WorkflowCore.Abstractions) |
+| **WorkflowCoreHangfire.AspNetCore** | ASP.NET Core integration with HttpContext support | [![NuGet](https://img.shields.io/nuget/v/WorkflowCoreHangfire.AspNetCore.svg)](https://www.nuget.org/packages/WorkflowCoreHangfire.AspNetCore) |
+| **WorkflowCoreHangfire** | Core library for console/worker applications | [![NuGet](https://img.shields.io/nuget/v/WorkflowCoreHangfire.svg)](https://www.nuget.org/packages/WorkflowCoreHangfire) |
+| **WorkflowCoreHangfire.Dashboard** | Standalone dashboard integration | [![NuGet](https://img.shields.io/nuget/v/WorkflowCoreHangfire.Dashboard.svg)](https://www.nuget.org/packages/WorkflowCoreHangfire.Dashboard) |
+| **WorkflowCoreHangfire.Abstractions** | Interfaces and abstractions | [![NuGet](https://img.shields.io/nuget/v/WorkflowCoreHangfire.Abstractions.svg)](https://www.nuget.org/packages/WorkflowCoreHangfire.Abstractions) |
 
 ## License
 

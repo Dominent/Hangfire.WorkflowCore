@@ -19,16 +19,16 @@ Choose the packages you need:
 
 ```bash
 # Core library (required)
-dotnet add package Hangfire.WorkflowCore
+dotnet add package WorkflowCoreHangfire
 
 # ASP.NET Core integration (recommended for web apps)
-dotnet add package Hangfire.WorkflowCore.AspNetCore
+dotnet add package WorkflowCoreHangfire.AspNetCore
 
 # Standalone dashboard integration
-dotnet add package Hangfire.WorkflowCore.Dashboard
+dotnet add package WorkflowCoreHangfire.Dashboard
 
 # Abstractions only (for custom integrations)
-dotnet add package Hangfire.WorkflowCore.Abstractions
+dotnet add package WorkflowCoreHangfire.Abstractions
 ```
 
 ## Quick Setup
