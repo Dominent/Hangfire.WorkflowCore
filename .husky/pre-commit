@@ -12,7 +12,7 @@ npm run version:bump -- --type minor
 if [ $? -eq 0 ]; then
   NEW_VERSION=$(grep -o '<Version>[^<]*' Directory.Build.props | sed 's/<Version>//')
   echo "✅ Version bumped: $CURRENT_VERSION → $NEW_VERSION"
-  git add Directory.Build.props
+  git add Directory.Build.props package.json
 else
   echo "⚠️  Version bump failed, continuing with current version"
 fi

@@ -32,10 +32,15 @@ async function getCurrentVersion() {
 
 async function updateBuildProps(newVersion) {
   const content = await fs.readFile(buildPropsPath, 'utf8');
-  const updatedContent = content.replace(
-    /<Version>.*?<\/Version>/,
-    `<Version>${newVersion}</Version>`
-  );
+  
+  // Convert semantic version to assembly version (X.Y.Z.0)
+  const versionParts = newVersion.split('.');
+  const assemblyVersion = `${versionParts[0]}.${versionParts[1] || '0'}.${versionParts[2] || '0'}.0`;
+  
+  let updatedContent = content
+    .replace(/<Version>.*?<\/Version>/, `<Version>${newVersion}</Version>`)
+    .replace(/<AssemblyVersion>.*?<\/AssemblyVersion>/, `<AssemblyVersion>${assemblyVersion}</AssemblyVersion>`)
+    .replace(/<FileVersion>.*?<\/FileVersion>/, `<FileVersion>${assemblyVersion}</FileVersion>`);
   
   if (!options.dryRun) {
     await fs.writeFile(buildPropsPath, updatedContent);

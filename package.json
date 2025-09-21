@@ -1,6 +1,6 @@
 {
   "name": "hangfire-workflowcore",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Build and release scripts for Hangfire.WorkflowCore - A powerful integration library combining Hangfire's job scheduling with WorkflowCore's orchestration",
   "main": "index.js",
   "scripts": {
